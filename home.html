@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Stitchers — Canada's Seamstress & Dressmaker Community</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #FAF7F2;
+  --warm-white: #FFFDF9;
+  --blush: #F2D9D0;
+  --rose: #C4716A;
+  --rose-deep: #A0524A;
+  --rose-light: #EAA99F;
+  --plum: #4A2040;
+  --plum-light: #7A3A60;
+  --gold: #C9A84C;
+  --gold-light: #E8D5A0;
+  --sage: #6B8F71;
+  --sage-light: #B8D4BB;
+  --charcoal: #2C2C2C;
+  --mid: #666;
+  --light: #999;
+  --border: #E8E0D8;
+  --ff-serif: 'Playfair Display', Georgia, serif;
+  --ff-sans: 'Inter', system-ui, sans-serif;
+  --shadow: 0 2px 12px rgba(0,0,0,0.07);
+  --shadow-md: 0 4px 24px rgba(0,0,0,0.10);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--cream); color: var(--charcoal); font-family: var(--ff-sans); font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+/* NAV */
+nav { background: var(--warm-white); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 68px; }
+.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo-mark { width: 36px; height: 36px; background: var(--plum); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.logo-mark svg { width: 20px; height: 20px; stroke: white; fill: none; stroke-width: 1.5; stroke-linecap: round; }
+.logo-text { font-family: var(--ff-serif); font-size: 22px; font-weight: 700; color: var(--plum); letter-spacing: -0.02em; }
+.nav-links { display: flex; align-items: center; gap: 28px; }
+.nav-links a { text-decoration: none; color: var(--mid); font-size: 14px; font-weight: 500; transition: color 0.15s; }
+.nav-links a:hover { color: var(--plum); }
+.nav-ctas { display: flex; align-items: center; gap: 12px; }
+.btn-ghost { border: 1.5px solid var(--plum); color: var(--plum); background: none; border-radius: 100px; padding: 8px 20px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--ff-sans); transition: all 0.15s; }
+.btn-ghost:hover { background: var(--plum); color: white; }
+.btn-primary { background: var(--plum); color: white; border: none; border-radius: 100px; padding: 9px 22px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--ff-sans); transition: background 0.15s; }
+.btn-primary:hover { background: var(--plum-light); }
+
+/* HERO */
+.hero { background: var(--plum); min-height: 560px; display: flex; align-items: center; position: relative; overflow: hidden; }
+.hero-texture { position: absolute; inset: 0; background-image: radial-gradient(circle at 20% 50%, rgba(194,113,106,0.18) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(201,168,76,0.12) 0%, transparent 40%); }
+.hero-pattern { position: absolute; right: 0; top: 0; bottom: 0; width: 45%; opacity: 0.06; background-image: repeating-linear-gradient(45deg, white 0px, white 1px, transparent 1px, transparent 12px), repeating-linear-gradient(-45deg, white 0px, white 1px, transparent 1px, transparent 12px); }
+.hero-inner { max-width: 1200px; margin: 0 auto; padding: 80px 24px; position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 420px; gap: 60px; align-items: center; }
+.hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 100px; padding: 6px 14px; margin-bottom: 20px; }
+.hero-eyebrow span { font-size: 12px; font-weight: 600; color: var(--gold-light); letter-spacing: 0.06em; text-transform: uppercase; }
+.hero h1 { font-family: var(--ff-serif); font-size: clamp(36px, 4vw, 54px); font-weight: 700; color: white; line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 20px; }
+.hero h1 em { font-style: italic; color: var(--rose-light); }
+.hero-sub { font-size: 17px; color: rgba(255,255,255,0.72); line-height: 1.7; margin-bottom: 36px; max-width: 480px; }
+.hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+.btn-hero { background: var(--rose); color: white; border: none; border-radius: 100px; padding: 14px 28px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: var(--ff-sans); transition: background 0.15s; }
+.btn-hero:hover { background: var(--rose-deep); }
+.btn-hero-ghost { background: rgba(255,255,255,0.12); color: white; border: 1.5px solid rgba(255,255,255,0.3); border-radius: 100px; padding: 13px 28px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: var(--ff-sans); transition: all 0.15s; }
+.btn-hero-ghost:hover { background: rgba(255,255,255,0.2); }
+.hero-stats { display: flex; gap: 32px; margin-top: 44px; padding-top: 36px; border-top: 1px solid rgba(255,255,255,0.12); }
+.hero-stat-num { font-family: var(--ff-serif); font-size: 28px; font-weight: 700; color: white; }
+.hero-stat-label { font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 2px; }
+
+/* HERO CARD */
+.hero-card-stack { position: relative; }
+.profile-card-hero { background: white; border-radius: 20px; padding: 24px; box-shadow: 0 8px 40px rgba(0,0,0,0.25); position: relative; z-index: 2; }
+.profile-card-hero-2 { background: rgba(255,255,255,0.5); border-radius: 20px; padding: 24px; position: absolute; bottom: -14px; left: 14px; right: -14px; z-index: 1; height: 80px; }
+.pch-header { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+.pch-avatar { width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, var(--blush), var(--rose-light)); display: flex; align-items: center; justify-content: center; font-family: var(--ff-serif); font-size: 20px; font-weight: 700; color: var(--rose-deep); }
+.pch-name { font-family: var(--ff-serif); font-size: 17px; font-weight: 700; color: var(--charcoal); }
+.pch-loc { font-size: 12px; color: var(--light); margin-top: 2px; }
+.pch-badge { display: inline-block; background: var(--plum); color: white; font-size: 10px; font-weight: 600; padding: 3px 9px; border-radius: 100px; margin-top: 4px; }
+.pch-specialties { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+.pch-tag { background: var(--cream); color: var(--plum); border: 1px solid var(--border); border-radius: 100px; padding: 4px 10px; font-size: 11px; font-weight: 500; }
+.pch-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; border-radius: 10px; overflow: hidden; }
+.pch-img { aspect-ratio: 1; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+.pch-img:nth-child(1) { background: linear-gradient(135deg, #F2D9D0, #EAA99F); }
+.pch-img:nth-child(2) { background: linear-gradient(135deg, #D0D9F2, #9FB4EA); }
+.pch-img:nth-child(3) { background: linear-gradient(135deg, #D9F2D0, #9FEA9F); }
+.pch-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+.pch-rating { display: flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 600; color: var(--charcoal); }
+.pch-stars { color: var(--gold); font-size: 12px; }
+.pch-price { font-size: 13px; color: var(--mid); }
+.pch-price strong { color: var(--plum); font-weight: 700; }
+
+/* SEARCH BAR */
+.search-section { background: var(--warm-white); border-bottom: 1px solid var(--border); padding: 20px 0; }
+.search-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.search-bar { display: flex; gap: 0; background: white; border: 1.5px solid var(--border); border-radius: 100px; overflow: hidden; box-shadow: var(--shadow); }
+.search-field { display: flex; align-items: center; gap: 10px; padding: 12px 20px; flex: 1; border-right: 1px solid var(--border); }
+.search-field svg { width: 16px; height: 16px; stroke: var(--light); fill: none; stroke-width: 2; flex-shrink: 0; }
+.search-field input { border: none; outline: none; font-family: var(--ff-sans); font-size: 14px; color: var(--charcoal); background: none; width: 100%; }
+.search-field input::placeholder { color: var(--light); }
+.search-submit { background: var(--plum); color: white; border: none; padding: 12px 28px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--ff-sans); border-radius: 0 100px 100px 0; transition: background 0.15s; }
+.search-submit:hover { background: var(--plum-light); }
+.search-filters { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+.filter-pill { background: white; border: 1px solid var(--border); border-radius: 100px; padding: 6px 14px; font-size: 12px; font-weight: 500; color: var(--mid); cursor: pointer; transition: all 0.15s; }
+.filter-pill:hover, .filter-pill.active { background: var(--plum); color: white; border-color: var(--plum); }
+
+/* SECTION COMMON */
+section { padding: 72px 0; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.section-eyebrow { font-size: 11px; font-weight: 700; color: var(--rose); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
+.section-title { font-family: var(--ff-serif); font-size: clamp(26px, 3vw, 38px); font-weight: 700; color: var(--plum); letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 14px; }
+.section-sub { font-size: 16px; color: var(--mid); max-width: 520px; line-height: 1.7; }
+.section-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; }
+.section-header-left { }
+.see-all { font-size: 13px; font-weight: 600; color: var(--plum); text-decoration: none; display: flex; align-items: center; gap: 4px; }
+.see-all:hover { color: var(--plum-light); }
+
+/* FEATURED STITCHERS */
+.stitchers-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.stitcher-card { background: white; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
+.stitcher-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.stitcher-card-cover { height: 140px; display: flex; align-items: center; justify-content: center; font-size: 40px; position: relative; }
+.stitcher-card-cover:nth-child(1) { background: linear-gradient(135deg, #F2D9D0, #EAA99F); }
+.cover-1 { background: linear-gradient(135deg, #F2D9D0, #C4716A); }
+.cover-2 { background: linear-gradient(135deg, #D0D5F2, #7A3A60); }
+.cover-3 { background: linear-gradient(135deg, #F2EDD0, #C9A84C); }
+.cover-4 { background: linear-gradient(135deg, #D0F2D9, #6B8F71); }
+.stitcher-badge-cover { position: absolute; top: 10px; right: 10px; background: var(--gold); color: white; font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 100px; letter-spacing: 0.05em; }
+.stitcher-card-body { padding: 16px; }
+.stitcher-avatar-wrap { margin-top: -28px; margin-bottom: 10px; }
+.stitcher-avatar { width: 52px; height: 52px; border-radius: 50%; border: 3px solid white; display: flex; align-items: center; justify-content: center; font-family: var(--ff-serif); font-size: 18px; font-weight: 700; color: white; box-shadow: var(--shadow); }
+.av-1 { background: var(--rose); }
+.av-2 { background: var(--plum); }
+.av-3 { background: var(--gold); }
+.av-4 { background: var(--sage); }
+.stitcher-name { font-family: var(--ff-serif); font-size: 15px; font-weight: 700; color: var(--charcoal); margin-bottom: 2px; }
+.stitcher-city { font-size: 11px; color: var(--light); margin-bottom: 8px; }
+.stitcher-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 12px; }
+.s-tag { font-size: 10px; font-weight: 500; padding: 3px 8px; border-radius: 100px; }
+.s-tag-rose { background: #FEF0EE; color: var(--rose-deep); }
+.s-tag-plum { background: #F0EAF4; color: var(--plum); }
+.s-tag-gold { background: #FDF6E3; color: #8B6914; }
+.s-tag-sage { background: #EEF5EF; color: #3D6B45; }
+.stitcher-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid var(--border); }
+.s-rating { font-size: 12px; font-weight: 600; color: var(--charcoal); display: flex; align-items: center; gap: 3px; }
+.s-stars { color: var(--gold); font-size: 11px; }
+.s-reviews { font-size: 11px; color: var(--light); }
+.s-price { font-size: 12px; color: var(--mid); }
+.s-price strong { color: var(--plum); font-size: 13px; }
+
+/* HOW IT WORKS */
+.how-section { background: var(--plum); }
+.how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 48px; }
+.how-step { background: rgba(255,255,255,0.06); padding: 36px 32px; border-radius: 4px; position: relative; }
+.how-step:first-child { border-radius: 16px 4px 4px 16px; }
+.how-step:last-child { border-radius: 4px 16px 16px 4px; }
+.how-num { font-family: var(--ff-serif); font-size: 48px; font-weight: 700; color: rgba(255,255,255,0.08); line-height: 1; margin-bottom: 20px; }
+.how-icon { width: 48px; height: 48px; background: var(--rose); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+.how-icon svg { width: 24px; height: 24px; stroke: white; fill: none; stroke-width: 1.5; stroke-linecap: round; }
+.how-title { font-family: var(--ff-serif); font-size: 20px; font-weight: 700; color: white; margin-bottom: 10px; }
+.how-desc { font-size: 14px; color: rgba(255,255,255,0.65); line-height: 1.7; }
+
+/* SPECIALTIES */
+.spec-section { background: var(--warm-white); }
+.spec-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 40px; }
+.spec-card { background: white; border-radius: 14px; padding: 24px; border: 1px solid var(--border); transition: all 0.2s; cursor: pointer; display: flex; align-items: flex-start; gap: 16px; }
+.spec-card:hover { border-color: var(--rose); box-shadow: var(--shadow); transform: translateY(-2px); }
+.spec-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.spec-icon-1 { background: #FEF0EE; }
+.spec-icon-2 { background: #F0EAF4; }
+.spec-icon-3 { background: #FDF6E3; }
+.spec-icon-4 { background: #EEF5EF; }
+.spec-icon-5 { background: #EEF2FE; }
+.spec-icon-6 { background: #FEF5EE; }
+.spec-name { font-weight: 700; font-size: 14px; color: var(--charcoal); margin-bottom: 4px; }
+.spec-count { font-size: 12px; color: var(--light); }
+.spec-desc { font-size: 13px; color: var(--mid); margin-top: 6px; line-height: 1.5; }
+
+/* PROVINCES */
+.province-section { }
+.province-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 40px; }
+.province-card { background: white; border-radius: 12px; padding: 20px 16px; text-align: center; border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; }
+.province-card:hover { border-color: var(--plum); background: var(--plum); color: white; }
+.province-card:hover .prov-name { color: white; }
+.province-card:hover .prov-count { color: rgba(255,255,255,0.7); }
+.province-flag { font-size: 24px; margin-bottom: 8px; }
+.prov-name { font-weight: 700; font-size: 13px; color: var(--charcoal); margin-bottom: 2px; }
+.prov-count { font-size: 11px; color: var(--light); }
+
+/* COMMUNITY FEED */
+.community-section { background: var(--cream); }
+.feed-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 40px; }
+.feed-card { background: white; border-radius: 16px; padding: 24px; border: 1px solid var(--border); }
+.feed-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.feed-avatar { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--ff-serif); font-size: 14px; font-weight: 700; color: white; flex-shrink: 0; }
+.feed-meta { }
+.feed-name { font-weight: 700; font-size: 13px; color: var(--charcoal); }
+.feed-time { font-size: 11px; color: var(--light); }
+.feed-type { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 100px; margin-left: 6px; }
+.ft-tip { background: #EEF5EF; color: #3D6B45; }
+.ft-work { background: #FEF0EE; color: var(--rose-deep); }
+.ft-question { background: #F0EAF4; color: var(--plum); }
+.ft-event { background: #FDF6E3; color: #8B6914; }
+.feed-text { font-size: 13px; color: var(--mid); line-height: 1.65; margin-bottom: 14px; }
+.feed-img { width: 100%; height: 160px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 36px; margin-bottom: 14px; }
+.fi-1 { background: linear-gradient(135deg, #F2D9D0, #EAA99F); }
+.fi-2 { background: linear-gradient(135deg, #F2EDD0, #E8D5A0); }
+.feed-actions { display: flex; gap: 16px; }
+.feed-action { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--light); cursor: pointer; }
+.feed-action:hover { color: var(--rose); }
+
+/* JOIN BANNER */
+.join-section { background: linear-gradient(135deg, var(--blush) 0%, var(--cream) 100%); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.join-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+.join-title { font-family: var(--ff-serif); font-size: clamp(28px, 3vw, 40px); font-weight: 700; color: var(--plum); line-height: 1.2; margin-bottom: 16px; }
+.join-sub { font-size: 15px; color: var(--mid); line-height: 1.7; margin-bottom: 28px; }
+.join-checklist { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+.join-check { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: var(--charcoal); }
+.check-icon { width: 20px; height: 20px; background: var(--sage); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.check-icon svg { width: 11px; height: 11px; stroke: white; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.join-tiers { display: flex; flex-direction: column; gap: 14px; }
+.tier-card { background: white; border-radius: 14px; padding: 22px; border: 1.5px solid var(--border); }
+.tier-card.featured { border-color: var(--plum); position: relative; }
+.tier-badge { position: absolute; top: -10px; left: 20px; background: var(--plum); color: white; font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 100px; }
+.tier-name { font-weight: 700; font-size: 14px; color: var(--charcoal); margin-bottom: 4px; }
+.tier-price { font-family: var(--ff-serif); font-size: 24px; font-weight: 700; color: var(--plum); margin-bottom: 6px; }
+.tier-price span { font-size: 13px; font-weight: 400; color: var(--light); font-family: var(--ff-sans); }
+.tier-features { display: flex; flex-direction: column; gap: 4px; }
+.tier-feature { font-size: 12px; color: var(--mid); display: flex; align-items: center; gap: 6px; }
+.tier-feature::before { content: '✓'; color: var(--sage); font-weight: 700; font-size: 11px; }
+
+/* TESTIMONIALS */
+.testimonial-section { background: var(--plum); }
+.testimonial-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 48px; }
+.testimonial-card { background: rgba(255,255,255,0.08); border-radius: 16px; padding: 28px; }
+.t-quote { font-family: var(--ff-serif); font-size: 15px; font-style: italic; color: rgba(255,255,255,0.85); line-height: 1.7; margin-bottom: 20px; }
+.t-author { display: flex; align-items: center; gap: 12px; }
+.t-avatar { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--ff-serif); font-size: 14px; font-weight: 700; color: white; }
+.t-name { font-weight: 700; font-size: 13px; color: white; }
+.t-city { font-size: 11px; color: rgba(255,255,255,0.5); }
+
+/* FOOTER */
+footer { background: var(--charcoal); padding: 60px 0 32px; }
+.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+.footer-brand { }
+.footer-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.footer-logo-mark { width: 32px; height: 32px; background: var(--rose); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.footer-logo-text { font-family: var(--ff-serif); font-size: 20px; font-weight: 700; color: white; }
+.footer-tagline { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.6; max-width: 220px; }
+.footer-col-title { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.4); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 16px; }
+.footer-links { display: flex; flex-direction: column; gap: 10px; }
+.footer-links a { font-size: 13px; color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.15s; }
+.footer-links a:hover { color: white; }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; }
+.footer-copy { font-size: 12px; color: rgba(255,255,255,0.35); }
+.footer-maple { color: var(--rose); }
+
+@media (max-width: 960px) {
+  .hero-inner { grid-template-columns: 1fr; }
+  .hero-card-stack { display: none; }
+  .stitchers-grid { grid-template-columns: repeat(2, 1fr); }
+  .how-grid { grid-template-columns: 1fr; }
+  .spec-grid { grid-template-columns: repeat(2, 1fr); }
+  .province-grid { grid-template-columns: repeat(3, 1fr); }
+  .feed-grid { grid-template-columns: 1fr; }
+  .join-inner { grid-template-columns: 1fr; }
+  .testimonial-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .nav-links { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2"/><path d="M8 12s1-4 4-4 4 4 4 4-1 4-4 4-4-4-4-4"/></svg>
+      </div>
+      <span class="logo-text">Stitchers</span>
+    </a>
+    <div class="nav-links">
+      <a href="#find">Find a Stitcher</a>
+      <a href="#specialties">Specialties</a>
+      <a href="#community">Community</a>
+      <a href="#about">About</a>
+    </div>
+    <div class="nav-ctas">
+      <button class="btn-ghost">Sign In</button>
+      <button class="btn-primary">Join Free</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-texture"></div>
+  <div class="hero-pattern"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">
+        <span>🍁 Canada's Sewing Community</span>
+      </div>
+      <h1>Find the perfect <em>seamstress</em> near you — or build your business with us</h1>
+      <p class="hero-sub">Stitchers connects Canadians who need expert garment work with skilled seamstresses, dressmakers, and restoration specialists from coast to coast.</p>
+      <div class="hero-actions">
+        <button class="btn-hero">Find a Stitcher Near Me</button>
+        <button class="btn-hero-ghost">Join as a Stitcher</button>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-num">2,400+</div>
+          <div class="hero-stat-label">Skilled stitchers</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">10 Provinces</div>
+          <div class="hero-stat-label">Coast to coast</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">18,000+</div>
+          <div class="hero-stat-label">Projects completed</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-card-stack">
+      <div class="profile-card-hero">
+        <div class="pch-header">
+          <div class="pch-avatar">M</div>
+          <div>
+            <div class="pch-name">Marie Tremblay</div>
+            <div class="pch-loc">📍 Montréal, QC</div>
+            <div class="pch-badge">Pro Stitcher</div>
+          </div>
+        </div>
+        <div class="pch-specialties">
+          <span class="pch-tag">Bridal & Formal</span>
+          <span class="pch-tag">Alterations</span>
+          <span class="pch-tag">Custom Design</span>
+        </div>
+        <div class="pch-gallery">
+          <div class="pch-img">👗</div>
+          <div class="pch-img">🧵</div>
+          <div class="pch-img">✂️</div>
+        </div>
+        <div class="pch-footer">
+          <div class="pch-rating">
+            <span class="pch-stars">★★★★★</span>
+            4.9 <span style="font-weight:400;color:var(--light);font-size:11px;">(87 reviews)</span>
+          </div>
+          <div class="pch-price">From <strong>$65/hr</strong></div>
+        </div>
+      </div>
+      <div class="profile-card-hero-2"></div>
+    </div>
+  </div>
+</section>
+
+<!-- SEARCH -->
+<div class="search-section" id="find">
+  <div class="search-inner">
+    <div class="search-bar">
+      <div class="search-field">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" placeholder="What do you need? e.g. Wedding dress alterations, leather repair...">
+      </div>
+      <div class="search-field" style="max-width:200px; border-right:none;">
+        <svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 5.25-7 13-7 13S5 14.25 5 9a7 7 0 0 1 7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        <input type="text" placeholder="City or Postal Code">
+      </div>
+      <button class="search-submit">Search</button>
+    </div>
+    <div class="search-filters">
+      <span class="filter-pill active">All Specialties</span>
+      <span class="filter-pill">Bridal & Formal</span>
+      <span class="filter-pill">Alterations</span>
+      <span class="filter-pill">Custom Design</span>
+      <span class="filter-pill">Restoration</span>
+      <span class="filter-pill">Leather & Suede</span>
+      <span class="filter-pill">Costumes</span>
+      <span class="filter-pill">Knitwear</span>
+      <span class="filter-pill">Sustainable / Upcycling</span>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURED STITCHERS -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-header-left">
+        <div class="section-eyebrow">Featured Stitchers</div>
+        <h2 class="section-title">Skilled artisans near you</h2>
+      </div>
+      <a href="#" class="see-all">See all stitchers →</a>
+    </div>
+    <div class="stitchers-grid">
+
+      <div class="stitcher-card">
+        <div class="stitcher-card-cover cover-1">
+          🧵
+          <span class="stitcher-badge-cover">Top Rated</span>
+        </div>
+        <div class="stitcher-card-body">
+          <div class="stitcher-avatar-wrap">
+            <div class="stitcher-avatar av-1">M</div>
+          </div>
+          <div class="stitcher-name">Marie Tremblay</div>
+          <div class="stitcher-city">📍 Montréal, QC</div>
+          <div class="stitcher-tags">
+            <span class="s-tag s-tag-rose">Bridal</span>
+            <span class="s-tag s-tag-plum">Custom Design</span>
+          </div>
+          <div class="stitcher-footer">
+            <div>
+              <div class="s-rating"><span class="s-stars">★</span> 4.9</div>
+              <div class="s-reviews">87 reviews</div>
+            </div>
+            <div class="s-price">From <strong>$65/hr</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stitcher-card">
+        <div class="stitcher-card-cover cover-2">
+          👗
+          <span class="stitcher-badge-cover">Pro</span>
+        </div>
+        <div class="stitcher-card-body">
+          <div class="stitcher-avatar-wrap">
+            <div class="stitcher-avatar av-2">S</div>
+          </div>
+          <div class="stitcher-name">Sarah MacLeod</div>
+          <div class="stitcher-city">📍 Toronto, ON</div>
+          <div class="stitcher-tags">
+            <span class="s-tag s-tag-plum">Alterations</span>
+            <span class="s-tag s-tag-rose">Restoration</span>
+          </div>
+          <div class="stitcher-footer">
+            <div>
+              <div class="s-rating"><span class="s-stars">★</span> 4.8</div>
+              <div class="s-reviews">124 reviews</div>
+            </div>
+            <div class="s-price">From <strong>$55/hr</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stitcher-card">
+        <div class="stitcher-card-cover cover-3">
+          ✂️
+        </div>
+        <div class="stitcher-card-body">
+          <div class="stitcher-avatar-wrap">
+            <div class="stitcher-avatar av-3">L</div>
+          </div>
+          <div class="stitcher-name">Linda Okafor</div>
+          <div class="stitcher-city">📍 Calgary, AB</div>
+          <div class="stitcher-tags">
+            <span class="s-tag s-tag-gold">Costumes</span>
+            <span class="s-tag s-tag-rose">Custom Design</span>
+          </div>
+          <div class="stitcher-footer">
+            <div>
+              <div class="s-rating"><span class="s-stars">★</span> 5.0</div>
+              <div class="s-reviews">46 reviews</div>
+            </div>
+            <div class="s-price">From <strong>$70/hr</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stitcher-card">
+        <div class="stitcher-card-cover cover-4">
+          🪡
+          <span class="stitcher-badge-cover">New</span>
+        </div>
+        <div class="stitcher-card-body">
+          <div class="stitcher-avatar-wrap">
+            <div class="stitcher-avatar av-4">J</div>
+          </div>
+          <div class="stitcher-name">Jennifer Park</div>
+          <div class="stitcher-city">📍 Vancouver, BC</div>
+          <div class="stitcher-tags">
+            <span class="s-tag s-tag-sage">Sustainable</span>
+            <span class="s-tag s-tag-plum">Knitwear</span>
+          </div>
+          <div class="stitcher-footer">
+            <div>
+              <div class="s-rating"><span class="s-stars">★</span> 4.7</div>
+              <div class="s-reviews">22 reviews</div>
+            </div>
+            <div class="s-price">From <strong>$48/hr</strong></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section">
+  <div class="container">
+    <div class="section-eyebrow" style="color:var(--rose-light)">How it works</div>
+    <h2 class="section-title" style="color:white">Two ways to use Stitchers</h2>
+    <div class="how-grid">
+      <div class="how-step">
+        <div class="how-num">01</div>
+        <div class="how-icon">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </div>
+        <div class="how-title">Search & discover</div>
+        <div class="how-desc">Browse hundreds of skilled seamstresses, dressmakers, and restoration specialists across Canada. Filter by specialty, province, price range, and availability.</div>
+      </div>
+      <div class="how-step">
+        <div class="how-num">02</div>
+        <div class="how-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="how-title">Connect directly</div>
+        <div class="how-desc">Message your stitcher directly through our platform. Share photos, discuss your project, get a quote, and book an appointment — all in one place.</div>
+      </div>
+      <div class="how-step">
+        <div class="how-num">03</div>
+        <div class="how-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <div class="how-title">Leave a review</div>
+        <div class="how-desc">After your project is complete, leave a review to help others in the community find the best stitchers. Our rating system rewards quality and reliability.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SPECIALTIES -->
+<section class="spec-section" id="specialties">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-header-left">
+        <div class="section-eyebrow">Browse by specialty</div>
+        <h2 class="section-title">Whatever you need sewn</h2>
+        <p class="section-sub">From emergency hem repairs to one-of-a-kind wedding gowns — Stitchers has a specialist for every project.</p>
+      </div>
+    </div>
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-icon spec-icon-1">👰</div>
+        <div>
+          <div class="spec-name">Bridal & Formal Wear</div>
+          <div class="spec-count">342 stitchers</div>
+          <div class="spec-desc">Wedding gowns, bridesmaid dresses, mother of the bride, prom and gala alterations.</div>
+        </div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-icon spec-icon-2">✂️</div>
+        <div>
+          <div class="spec-name">Alterations & Tailoring</div>
+          <div class="spec-count">891 stitchers</div>
+          <div class="spec-desc">Hemming, taking in, letting out, resizing, and general clothing repairs.</div>
+        </div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-icon spec-icon-3">🎨</div>
+        <div>
+          <div class="spec-name">Custom Design & Dressmaking</div>
+          <div class="spec-count">567 stitchers</div>
+          <div class="spec-desc">Original garments made from scratch to your exact measurements and vision.</div>
+        </div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-icon spec-icon-4">🌿</div>
+        <div>
+          <div class="spec-name">Restoration & Upcycling</div>
+          <div class="spec-count">234 stitchers</div>
+          <div class="spec-desc">Vintage garment restoration, heirloom preservation, and sustainable upcycling.</div>
+        </div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-icon spec-icon-5">🎭</div>
+        <div>
+          <div class="spec-name">Costumes & Theatrical</div>
+          <div class="spec-count">178 stitchers</div>
+          <div class="spec-desc">Halloween, theatrical, film and TV, cosplay, and period costume creation.</div>
+        </div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-icon spec-icon-6">🧶</div>
+        <div>
+          <div class="spec-name">Knitwear & Specialty Fabrics</div>
+          <div class="spec-count">156 stitchers</div>
+          <div class="spec-desc">Leather, suede, denim, knitwear, and other specialty material experts.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROVINCES -->
+<section>
+  <div class="container">
+    <div class="section-eyebrow">Find stitchers near you</div>
+    <h2 class="section-title">Coast to coast coverage</h2>
+    <div class="province-grid">
+      <div class="province-card">
+        <div class="province-flag">🍁</div>
+        <div class="prov-name">Ontario</div>
+        <div class="prov-count">624 stitchers</div>
+      </div>
+      <div class="province-card">
+        <div class="province-flag">⚜️</div>
+        <div class="prov-name">Québec</div>
+        <div class="prov-count">487 stitchers</div>
+      </div>
+      <div class="province-card">
+        <div class="province-flag">🌊</div>
+        <div class="prov-name">British Columbia</div>
+        <div class="prov-count">312 stitchers</div>
+      </div>
+      <div class="province-card">
+        <div class="province-flag">🌾</div>
+        <div class="prov-name">Alberta</div>
+        <div class="prov-count">245 stitchers</div>
+      </div>
+      <div class="province-card">
+        <div class="province-flag">🌻</div>
+        <div class="prov-name">Manitoba</div>
+        <div class="prov-count">134 stitchers</div>
+      </div>
+      <div class="province-card">
+        <div class="province-flag">🌿</div>
+        <div class="prov-name">Saskatchewan</div>
+        <div class="prov-count">98 stitchers</div>
+      </div>
+      <div class="province-card">
+        <div class="province-flag">🎣</div>
+        <div class="prov-name">Nova Scotia</div>
+        <div class="prov-count">87 stitchers</div>
+      </div>
+      <div class="province-card">
+        <div class="province-flag">🦞</div>
+        <div class="prov-name">New Brunswick</div>
+        <div class="prov-count">76 stitchers</div>
+      </div>
+      <div class="province-card">
+        <div class="province-flag">🏔️</div>
+        <div class="prov-name">Newfoundland</div>
+        <div class="prov-count">54 stitchers</div>
+      </div>
+      <div class="province-card">
+        <div class="province-flag">🏝️</div>
+        <div class="prov-name">PEI</div>
+        <div class="prov-count">32 stitchers</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMUNITY FEED -->
+<section class="community-section" id="community">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-header-left">
+        <div class="section-eyebrow">Community</div>
+        <h2 class="section-title">The Stitchers feed</h2>
+        <p class="section-sub">Tips, inspiration, questions, and work from Canada's sewing community.</p>
+      </div>
+      <a href="#" class="see-all">View full community →</a>
+    </div>
+    <div class="feed-grid">
+      <div class="feed-card">
+        <div class="feed-header">
+          <div class="feed-avatar av-1">M</div>
+          <div class="feed-meta">
+            <div class="feed-name">Marie T. <span class="feed-type ft-tip">Tip</span></div>
+            <div class="feed-time">2 hours ago · Montréal</div>
+          </div>
+        </div>
+        <div class="feed-img fi-1">👗</div>
+        <div class="feed-text">Just finished this custom bridal gown — hand-beaded bodice took 40 hours alone. The client wanted something that honoured her Haitian heritage with a modern silhouette. So proud of how this turned out! 🧵</div>
+        <div class="feed-actions">
+          <span class="feed-action">♡ 48 likes</span>
+          <span class="feed-action">💬 12 comments</span>
+          <span class="feed-action">↗ Share</span>
+        </div>
+      </div>
+      <div class="feed-card">
+        <div class="feed-header">
+          <div class="feed-avatar av-3">L</div>
+          <div class="feed-meta">
+            <div class="feed-name">Linda O. <span class="feed-type ft-tip">Pro Tip</span></div>
+            <div class="feed-time">5 hours ago · Calgary</div>
+          </div>
+        </div>
+        <div class="feed-text">Pro tip for working with silk charmeuse: Always use a microtex needle (size 60/8 or 70/10) and tissue paper underneath when sewing seams. The paper tears away cleanly and prevents the fabric from slipping or snagging on the feed dogs. Game changer for my bridal work! 🪡</div>
+        <div class="feed-actions">
+          <span class="feed-action">♡ 92 likes</span>
+          <span class="feed-action">💬 24 comments</span>
+          <span class="feed-action">↗ Share</span>
+        </div>
+      </div>
+      <div class="feed-card">
+        <div class="feed-header">
+          <div class="feed-avatar av-2">S</div>
+          <div class="feed-meta">
+            <div class="feed-name">Sarah M. <span class="feed-type ft-question">Question</span></div>
+            <div class="feed-time">1 day ago · Toronto</div>
+          </div>
+        </div>
+        <div class="feed-text">Has anyone worked with deadstock denim lately? I have a client who wants a custom jacket made from vintage Levi's deadstock and I'm not sure if my industrial Singer will handle the triple-layer areas without issues. Any advice welcome! 🧵</div>
+        <div class="feed-actions">
+          <span class="feed-action">♡ 31 likes</span>
+          <span class="feed-action">💬 18 comments</span>
+          <span class="feed-action">↗ Share</span>
+        </div>
+      </div>
+      <div class="feed-card">
+        <div class="feed-header">
+          <div class="feed-avatar av-4">J</div>
+          <div class="feed-meta">
+            <div class="feed-name">Jennifer P. <span class="feed-type ft-event">Event</span></div>
+            <div class="feed-time">2 days ago · Vancouver</div>
+          </div>
+        </div>
+        <div class="feed-img fi-2">🧶</div>
+        <div class="feed-text">Hosting a free sustainable sewing workshop in Vancouver on August 10th — we'll be covering zero-waste pattern cutting and upcycling denim. Space limited to 12. DM me to register! 🌿</div>
+        <div class="feed-actions">
+          <span class="feed-action">♡ 67 likes</span>
+          <span class="feed-action">💬 34 comments</span>
+          <span class="feed-action">↗ Share</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- JOIN SECTION -->
+<section class="join-section" id="join">
+  <div class="container">
+    <div class="join-inner">
+      <div>
+        <div class="section-eyebrow">For stitchers</div>
+        <h2 class="join-title">Build your sewing business with Stitchers</h2>
+        <p class="join-sub">Join Canada's largest community of professional seamstresses and dressmakers. Get discovered by clients, showcase your portfolio, and grow your business.</p>
+        <div class="join-checklist">
+          <div class="join-check">
+            <div class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+            Create a beautiful profile with your portfolio, specialties, and pricing
+          </div>
+          <div class="join-check">
+            <div class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+            Get found by clients searching in your city and province
+          </div>
+          <div class="join-check">
+            <div class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+            Receive and manage booking requests through our platform
+          </div>
+          <div class="join-check">
+            <div class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+            Connect with Canada's sewing community — share tips and get inspired
+          </div>
+          <div class="join-check">
+            <div class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+            Build your reputation through verified reviews
+          </div>
+        </div>
+        <button class="btn-hero">Create Your Stitcher Profile</button>
+      </div>
+      <div class="join-tiers">
+        <div class="tier-card">
+          <div class="tier-name">Community (Free)</div>
+          <div class="tier-price">$0 <span>/ forever</span></div>
+          <div class="tier-features">
+            <div class="tier-feature">Basic profile listing</div>
+            <div class="tier-feature">Up to 6 portfolio photos</div>
+            <div class="tier-feature">Community feed access</div>
+            <div class="tier-feature">Client messaging</div>
+            <div class="tier-feature">1 specialty tag</div>
+          </div>
+        </div>
+        <div class="tier-card featured">
+          <div class="tier-badge">Most Popular</div>
+          <div class="tier-name">Pro Stitcher</div>
+          <div class="tier-price">$19 <span>/ month</span></div>
+          <div class="tier-features">
+            <div class="tier-feature">Featured placement in search</div>
+            <div class="tier-feature">Unlimited portfolio photos</div>
+            <div class="tier-feature">Booking calendar integration</div>
+            <div class="tier-feature">5 specialty tags</div>
+            <div class="tier-feature">Analytics dashboard</div>
+            <div class="tier-feature">Priority support</div>
+            <div class="tier-feature">Verified Pro badge</div>
+          </div>
+        </div>
+        <div class="tier-card">
+          <div class="tier-name">Studio</div>
+          <div class="tier-price">$49 <span>/ month</span></div>
+          <div class="tier-features">
+            <div class="tier-feature">Everything in Pro</div>
+            <div class="tier-feature">Multiple staff profiles</div>
+            <div class="tier-feature">Business branding tools</div>
+            <div class="tier-feature">Promoted listings</div>
+            <div class="tier-feature">Invoice & payment tools</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonial-section">
+  <div class="container">
+    <div class="section-eyebrow" style="color:var(--rose-light)">What they say</div>
+    <h2 class="section-title" style="color:white">From our community</h2>
+    <div class="testimonial-grid">
+      <div class="testimonial-card">
+        <div class="t-quote">"I found Marie through Stitchers and she completely transformed my mother's 1960s wedding dress into something I could wear at my own wedding. I never would have found her through Google."</div>
+        <div class="t-author">
+          <div class="t-avatar av-4">A</div>
+          <div>
+            <div class="t-name">Amara Chen</div>
+            <div class="t-city">Toronto, ON — Bride</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="t-quote">"Joining Stitchers as a Pro member doubled my bookings within three months. The profile tools are beautiful and clients come to me already knowing what I do and what I charge."</div>
+        <div class="t-author">
+          <div class="t-avatar av-1">L</div>
+          <div>
+            <div class="t-name">Linda Okafor</div>
+            <div class="t-city">Calgary, AB — Pro Stitcher</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="t-quote">"The community feed is what keeps me coming back. I've learned more from other stitchers on this platform than from any class I've taken. It feels like a real professional home."</div>
+        <div class="t-author">
+          <div class="t-avatar av-2">J</div>
+          <div>
+            <div class="t-name">Jennifer Park</div>
+            <div class="t-city">Vancouver, BC — Pro Stitcher</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <div class="footer-logo-mark">
+            <svg width="16" height="16" viewBox="0 0 24 24" stroke="white" fill="none" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 12s1-4 4-4 4 4 4 4-1 4-4 4-4-4-4-4"/></svg>
+          </div>
+          <span class="footer-logo-text">Stitchers</span>
+        </div>
+        <p class="footer-tagline">Canada's community for seamstresses, dressmakers, and garment restoration specialists. 🍁</p>
+      </div>
+      <div>
+        <div class="footer-col-title">For Clients</div>
+        <div class="footer-links">
+          <a href="#">Find a Stitcher</a>
+          <a href="#">Browse Specialties</a>
+          <a href="#">How It Works</a>
+          <a href="#">Post a Project</a>
+          <a href="#">Gift Cards</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">For Stitchers</div>
+        <div class="footer-links">
+          <a href="#">Join Free</a>
+          <a href="#">Pro Membership</a>
+          <a href="#">Studio Plan</a>
+          <a href="#">Resources</a>
+          <a href="#">Community Guidelines</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Company</div>
+        <div class="footer-links">
+          <a href="#">About Us</a>
+          <a href="#">Blog</a>
+          <a href="#">Press</a>
+          <a href="#">Careers</a>
+          <a href="#">Contact</a>
+          <a href="#">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Stitchers Canada Inc. All rights reserved. Made with <span class="footer-maple">♥</span> in Canada.</div>
+      <div class="footer-copy">English · Français</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
