@@ -405,7 +405,7 @@ textarea.form-input{resize:vertical;}
             <div class="success-icon">🎉</div>
             <h2 class="success-title" id="success-title">Welcome to Stitchers!</h2>
             <p class="success-sub" id="success-sub">Your account has been created. Check your email to verify your address.</p>
-            <button class="btn-success" onclick="window.location.href='/'">Go to Dashboard →</button>
+            <button class="btn-success" onclick="window.location.href='dashboard.html'">Go to Dashboard →</button>
             <div style="margin-top:16px;font-size:13px;color:var(--light);">Check your spam folder if the email doesn't arrive within 2 minutes.</div>
           </div>
         </div>
@@ -515,7 +515,7 @@ async function handleSignin(e) {
     const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
     if (error) throw error;
     notify('signin', 'success', '✅ Signed in! Redirecting to your dashboard...');
-    setTimeout(()=>window.location.href='/', 1200);
+    setTimeout(()=>window.location.href='dashboard.html', 1200);
   } catch(ex) {
     const msg = ex.message || 'Sign in failed';
     notify('signin', 'error', msg.includes('Invalid') ? 'Incorrect email or password. Please try again.' : msg);
@@ -668,8 +668,7 @@ async function completeSignup() {
   const { data: { session } } = await sb.auth.getSession();
   if (session) {
     // Already logged in — redirect to dashboard
-    // window.location.href = '/dashboard'; // uncomment when dashboard is ready
-    console.log('Already signed in as:', session.user.email);
+    window.location.href = 'dashboard.html';
   }
 })();
 </script>
