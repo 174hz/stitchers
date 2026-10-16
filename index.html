@@ -664,12 +664,11 @@ async function completeSignup() {
 }
 
 // ── CHECK SESSION ON LOAD ──────────────────────────────────────────────────
+// Do NOT auto-redirect — let user see the page and choose to sign in or join
+// Only redirect after a successful sign in or sign up action
 (async () => {
-  const { data: { session } } = await sb.auth.getSession();
-  if (session) {
-    // Already logged in — redirect to dashboard
-    window.location.href = 'dashboard.html';
-  }
+  // Session check disabled to prevent redirect loop
+  // Redirect happens explicitly after login/signup success
 })();
 </script>
 </body>
