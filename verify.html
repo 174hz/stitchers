@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stitchers — Verifying your account</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --cream:#FAF7F2;--plum:#4A2040;--plum-light:#7A3A60;--rose:#C4716A;
+  --sage:#6B8F71;--mid:#666;--light:#999;--error:#C8102E;--success:#2D7A4A;
+  --ff-serif:'Playfair Display',Georgia,serif;--ff-sans:'Inter',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--cream);font-family:var(--ff-sans);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;}
+nav{position:fixed;top:0;left:0;right:0;background:var(--plum);height:60px;display:flex;align-items:center;padding:0 24px;gap:10px;}
+.logo-mark{width:30px;height:30px;background:var(--rose);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.logo-text{font-family:var(--ff-serif);font-size:18px;font-weight:700;color:white;}
+.card{background:white;border-radius:20px;padding:48px 40px;max-width:440px;width:100%;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,0.10);}
+.icon{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:36px;}
+.icon-loading{background:#F5F0F8;}
+.icon-success{background:#EEF5EF;}
+.icon-error{background:#FEF0EE;}
+.title{font-family:var(--ff-serif);font-size:26px;font-weight:700;color:var(--plum);margin-bottom:10px;}
+.sub{font-size:14px;color:var(--mid);line-height:1.7;margin-bottom:28px;}
+.btn{background:var(--plum);color:white;border:none;border-radius:100px;padding:14px 32px;font-size:15px;font-weight:600;cursor:pointer;font-family:var(--ff-sans);transition:background 0.15s;text-decoration:none;display:inline-block;}
+.btn:hover{background:var(--plum-light);}
+.btn-ghost{background:none;border:1.5px solid var(--plum);color:var(--plum);border-radius:100px;padding:12px 28px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--ff-sans);text-decoration:none;display:inline-block;margin-top:12px;}
+.spinner{width:36px;height:36px;border:3px solid #E8E0D8;border-top-color:var(--plum);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto;}
+@keyframes spin{to{transform:rotate(360deg);}}
+</style>
+</head>
+<body>
+
+<nav style="position:fixed;top:0;left:0;right:0;background:var(--plum);height:60px;display:flex;align-items:center;padding:0 24px;gap:10px;cursor:pointer;" onclick="window.location.href='home.html'">
+  <div class="logo-mark">🧵</div>
+  <span class="logo-text">Stitchers</span>
+  <span style="margin-left:auto;font-size:13px;color:rgba(255,255,255,0.6);">← Back to home</span>
+</nav>
+
+<div class="card" id="card">
+  <!-- Loading state -->
+  <div id="state-loading">
+    <div class="icon icon-loading">
+      <div class="spinner"></div>
+    </div>
+    <div class="title">Verifying your email...</div>
+    <div class="sub">Please wait while we confirm your account.</div>
+  </div>
+
+  <!-- Success state -->
+  <div id="state-success" style="display:none;">
+    <div class="icon icon-success">🎉</div>
+    <div class="title">Email verified!</div>
+    <div class="sub">Your Stitchers account is now fully active. You're ready to start building your profile and connecting with clients.</div>
+    <a href="dashboard.html" class="btn">Go to My Dashboard →</a>
+    <br>
+    <a href="home.html" class="btn-ghost">Browse Stitchers</a>
+  </div>
+
+  <!-- Already verified state -->
+  <div id="state-already" style="display:none;">
+    <div class="icon icon-success">✅</div>
+    <div class="title">Already verified!</div>
+    <div class="sub">Your email is already confirmed. Sign in to access your dashboard.</div>
+    <a href="index.html" class="btn">Sign In →</a>
+  </div>
+
+  <!-- Error state -->
+  <div id="state-error" style="display:none;">
+    <div class="icon icon-error">⚠️</div>
+    <div class="title" id="error-title">Verification failed</div>
+    <div class="sub" id="error-sub">The verification link may have expired or already been used. Request a new one below.</div>
+    <a href="index.html" class="btn">Back to Sign In</a>
+    <br>
+    <button class="btn-ghost" onclick="resendVerification()">Resend Verification Email</button>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL  = 'https://juyljsaqqkymtfvlftgo.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp1eWxqc2FxcWt5bXRmdmxmdGdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE5OTgzNDEsImV4cCI6MjEwNzU3NDM0MX0.3ZU35hBkfctK085y7160peLDqNxkzoo97hVumd06fuo';
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+function show(state) {
+  ['loading','success','already','error'].forEach(s => {
+    document.getElementById('state-'+s).style.display = s===state ? 'block' : 'none';
+  });
+}
+
+async function handleVerification() {
+  // Supabase puts token info in the URL hash or query params
+  const hash   = window.location.hash;
+  const params = new URLSearchParams(window.location.search);
+  const hashParams = new URLSearchParams(hash.replace('#',''));
+
+  const token_hash = params.get('token_hash') || hashParams.get('token_hash');
+  const type       = params.get('type')       || hashParams.get('type') || 'email';
+  const access_token  = hashParams.get('access_token');
+  const refresh_token = hashParams.get('refresh_token');
+
+  try {
+    // Method 1 — token_hash in query string (newer Supabase)
+    if (token_hash) {
+      const { data, error } = await sb.auth.verifyOtp({ token_hash, type });
+      if (error) throw error;
+      show('success');
+      setTimeout(()=>window.location.href='dashboard.html', 2000);
+      return;
+    }
+
+    // Method 2 — access_token in hash fragment (older Supabase)
+    if (access_token) {
+      const { data, error } = await sb.auth.setSession({ access_token, refresh_token });
+      if (error) throw error;
+      show('success');
+      setTimeout(()=>window.location.href='dashboard.html', 2000);
+      return;
+    }
+
+    // Method 3 — already have a session (clicked link while logged in)
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) {
+      show('already');
+      return;
+    }
+
+    // No token found
+    throw new Error('No verification token found in the link. Please try clicking the link again or request a new one.');
+
+  } catch(ex) {
+    document.getElementById('error-title').textContent = 'Verification failed';
+    document.getElementById('error-sub').textContent = ex.message || 'The link may have expired. Please request a new verification email.';
+    show('error');
+  }
+}
+
+async function resendVerification() {
+  const email = prompt('Enter your email address to resend the verification link:');
+  if (!email) return;
+  const { error } = await sb.auth.resend({ type: 'signup', email });
+  if (error) alert('Error: ' + error.message);
+  else alert('Verification email sent to ' + email + '. Check your inbox!');
+}
+
+handleVerification();
+</script>
+</body>
+</html>
