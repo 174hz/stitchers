@@ -198,7 +198,7 @@ select.form-input{cursor:pointer;appearance:none;background-image:url("data:imag
           <span class="nav-plan" id="nav-plan">Free</span>
         </div>
       </div>
-      <button class="btn-signout" onclick="signOut()">Sign Out</button>
+      <a href="home.html" style="color:rgba(255,255,255,0.65);font-size:13px;text-decoration:none;font-weight:500;">← Home</a><a href="home.html" style="color:rgba(255,255,255,0.6);font-size:13px;font-weight:500;text-decoration:none;margin-right:8px;">Home</a><button class="btn-signout" onclick="signOut()">Sign Out</button>
     </div>
   </div>
 </nav>
@@ -553,7 +553,7 @@ let uploadedPhotos = [];
   const { data: { session } } = await sb.auth.getSession();
   if (!session) {
     window.location.href = 'index.html';
-    return;
+    return; // redirect to sign in
   }
   currentUser = session.user;
   await loadProfile();
@@ -823,7 +823,7 @@ function showToast(msg, type) {
 
 async function signOut() {
   await sb.auth.signOut();
-  window.location.href = 'index.html';
+  window.location.href = 'home.html';
 }
 
 async function sendPasswordReset() {
