@@ -158,7 +158,7 @@ textarea.form-input{resize:vertical;}
       <div class="logo-mark">🧵</div>
       <span class="logo-text">Stitchers</span>
     </div>
-    <div class="nav-back" onclick="window.history.back()">← Back to Stitchers</div>
+    <div class="nav-back" onclick="window.location.href='home.html'">← Back to home</div>
   </div>
 </nav>
 
@@ -515,7 +515,7 @@ async function handleSignin(e) {
     const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
     if (error) throw error;
     notify('signin', 'success', '✅ Signed in! Redirecting to your dashboard...');
-    setTimeout(()=>window.location.href='dashboard.html', 1200);
+    setTimeout(()=>{ window.location.href='dashboard.html'; }, 1200);
   } catch(ex) {
     const msg = ex.message || 'Sign in failed';
     notify('signin', 'error', msg.includes('Invalid') ? 'Incorrect email or password. Please try again.' : msg);
@@ -663,13 +663,7 @@ async function completeSignup() {
   }
 }
 
-// ── CHECK SESSION ON LOAD ──────────────────────────────────────────────────
-// Do NOT auto-redirect — let user see the page and choose to sign in or join
-// Only redirect after a successful sign in or sign up action
-(async () => {
-  // Session check disabled to prevent redirect loop
-  // Redirect happens explicitly after login/signup success
-})();
+// No auto-redirect — user explicitly navigated here
 </script>
 </body>
 </html>
