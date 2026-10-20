@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Stitchers — How It Works</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#FAF7F2;--warm:#FFFDF9;--blush:#F2D9D0;--rose:#C4716A;--rose-d:#A0524A;--rose-l:#EAA99F;--plum:#4A2040;--plum-l:#7A3A60;--gold:#C9A84C;--sage:#6B8F71;--char:#2C2C2C;--mid:#666;--light:#999;--border:#E8E0D8;--serif:'Playfair Display',Georgia,serif;--sans:'Inter',system-ui,sans-serif;--sh:0 2px 12px rgba(0,0,0,0.07);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--cream);color:var(--char);font-family:var(--sans);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+nav{background:var(--plum);border-bottom:3px solid var(--rose);position:sticky;top:0;z-index:100;}
+.ni{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:64px;}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.lm{width:32px;height:32px;background:var(--rose);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;}
+.lt{font-family:var(--serif);font-size:20px;font-weight:700;color:white;}
+.nl{display:flex;align-items:center;gap:22px;}
+.nl a{color:rgba(255,255,255,0.75);text-decoration:none;font-size:13px;font-weight:500;}
+.nl a:hover{color:white;}
+.nc{display:flex;gap:10px;}
+.bg{border:1.5px solid rgba(255,255,255,0.4);color:white;background:none;border-radius:100px;padding:8px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--sans);}
+.bp{background:var(--rose);color:white;border:none;border-radius:100px;padding:9px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--sans);}
+.c{max-width:1200px;margin:0 auto;padding:0 24px;}
+.s{padding:64px 0;}
+.sa{background:var(--warm);}
+h1.pt{font-family:var(--serif);font-size:clamp(28px,4vw,46px);font-weight:700;color:var(--plum);letter-spacing:-0.02em;line-height:1.15;margin-bottom:14px;}
+h2.st{font-family:var(--serif);font-size:clamp(22px,3vw,34px);font-weight:700;color:var(--plum);letter-spacing:-0.02em;line-height:1.2;margin-bottom:10px;}
+.ey{font-size:11px;font-weight:700;color:var(--rose);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;}
+.sub{font-size:16px;color:var(--mid);line-height:1.7;max-width:560px;}
+.hero{background:var(--plum);padding:72px 0;}
+.hero h1{color:white;}
+.hero em{font-style:italic;color:var(--rose-l);}
+.hero .sub{color:rgba(255,255,255,0.65);}
+.btn{background:var(--plum);color:white;border:none;border-radius:100px;padding:13px 28px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--sans);text-decoration:none;display:inline-block;transition:background 0.15s;}
+.btn:hover{background:var(--plum-l);}
+.btn-rose{background:var(--rose);}
+.btn-rose:hover{background:var(--rose-d);}
+.btn-outline{background:none;border:1.5px solid var(--plum);color:var(--plum);}
+.card{background:var(--warm);border-radius:14px;border:1px solid var(--border);padding:24px;box-shadow:var(--sh);}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+.icon-box{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;}
+.ib-rose{background:#FEF0EE;}
+.ib-plum{background:#F0EAF4;}
+.ib-gold{background:#FDF6E3;}
+.ib-sage{background:#EEF5EF;}
+.fi{width:100%;background:white;border:1.5px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--char);font-family:var(--sans);font-size:14px;outline:none;transition:border-color 0.15s;}
+.fi:focus{border-color:var(--plum);box-shadow:0 0 0 3px rgba(74,32,64,0.08);}
+.fi::placeholder{color:var(--light);}
+.fg{margin-bottom:16px;}
+.fl{display:block;font-size:12px;font-weight:600;color:var(--char);margin-bottom:5px;}
+textarea.fi{resize:vertical;}
+footer{background:#2C2C2C;padding:52px 0 28px;}
+.fi2{max-width:1200px;margin:0 auto;padding:0 24px;}
+.fg2{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:36px;}
+.fb p{font-size:13px;color:rgba(255,255,255,0.45);line-height:1.65;margin-top:10px;max-width:220px;}
+.fl2{display:flex;align-items:center;gap:10px;}
+.flm{width:28px;height:28px;background:var(--rose);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;}
+.flt{font-family:var(--serif);font-size:18px;font-weight:700;color:white;}
+.fc h4{font-size:11px;font-weight:700;color:rgba(255,255,255,0.4);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:14px;}
+.fc a{display:block;font-size:13px;color:rgba(255,255,255,0.6);text-decoration:none;margin-bottom:8px;}
+.fc a:hover{color:white;}
+.fb2{border-top:1px solid rgba(255,255,255,0.08);padding-top:20px;display:flex;justify-content:space-between;font-size:12px;color:rgba(255,255,255,0.35);}
+.maple{color:var(--rose);}
+@media(max-width:900px){.fg2{grid-template-columns:1fr 1fr;}.grid3,.grid4{grid-template-columns:1fr 1fr;}.nl{display:none;}}
+@media(max-width:540px){.grid2,.grid3,.grid4{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<nav><div class="ni">
+  <a href="home.html" class="logo"><div class="lm">🧵</div><span class="lt">Stitchers</span></a>
+  <div class="nl"><a href="find.html">Find a Stitcher</a><a href="specialties.html">Specialties</a><a href="how-it-works.html">How It Works</a><a href="post-project.html">Post a Project</a></div>
+  <div class="nc" id="nc"><button class="bg" onclick="location.href='index.html'">Sign In</button><button class="bp" onclick="location.href='index.html'">Join Free</button></div>
+</div></nav>
+
+<div class="hero"><div class="c" style="text-align:center;">
+  <div class="ey">How Stitchers Works</div>
+  <h1 class="pt" style="color:white;margin-bottom:12px;">Simple. Direct. <em>Personal.</em></h1>
+  <p class="sub" style="color:rgba(255,255,255,0.65);margin:0 auto 32px;">Connect with skilled Canadian seamstresses and dressmakers in minutes — no middlemen, no guesswork.</p>
+  <a href="find.html" class="btn btn-rose">Find a Stitcher Now</a>
+</div></div>
+
+<div class="s"><div class="c">
+  <div style="text-align:center;margin-bottom:48px;"><div class="ey">For Clients</div><h2 class="st">Getting your project done in 4 steps</h2></div>
+  <div class="grid4">
+    <div class="card" style="text-align:center;">
+      <div class="icon-box ib-rose" style="margin:0 auto 14px;"><span>🔍</span></div>
+      <div style="font-size:13px;font-weight:700;color:var(--rose);margin-bottom:6px;">Step 1</div>
+      <div style="font-family:var(--serif);font-size:17px;font-weight:700;color:var(--plum);margin-bottom:8px;">Search</div>
+      <p style="font-size:13px;color:var(--mid);">Browse stitchers by specialty, province, price, and availability.</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="icon-box ib-plum" style="margin:0 auto 14px;"><span>💬</span></div>
+      <div style="font-size:13px;font-weight:700;color:var(--rose);margin-bottom:6px;">Step 2</div>
+      <div style="font-family:var(--serif);font-size:17px;font-weight:700;color:var(--plum);margin-bottom:8px;">Connect</div>
+      <p style="font-size:13px;color:var(--mid);">Message your stitcher directly. Share photos and discuss your project.</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="icon-box ib-gold" style="margin:0 auto 14px;"><span>📅</span></div>
+      <div style="font-size:13px;font-weight:700;color:var(--rose);margin-bottom:6px;">Step 3</div>
+      <div style="font-family:var(--serif);font-size:17px;font-weight:700;color:var(--plum);margin-bottom:8px;">Book</div>
+      <p style="font-size:13px;color:var(--mid);">Agree on scope, timeline, and price. Book your appointment.</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="icon-box ib-sage" style="margin:0 auto 14px;"><span>⭐</span></div>
+      <div style="font-size:13px;font-weight:700;color:var(--rose);margin-bottom:6px;">Step 4</div>
+      <div style="font-family:var(--serif);font-size:17px;font-weight:700;color:var(--plum);margin-bottom:8px;">Review</div>
+      <p style="font-size:13px;color:var(--mid);">Love your project? Leave a review to help the community grow.</p>
+    </div>
+  </div>
+</div></div>
+
+<div class="s sa"><div class="c">
+  <div style="text-align:center;margin-bottom:48px;"><div class="ey">For Stitchers</div><h2 class="st">Build your business on Stitchers</h2></div>
+  <div class="grid3">
+    <div class="card">
+      <div class="icon-box ib-plum"><span>👤</span></div>
+      <div style="font-family:var(--serif);font-size:17px;font-weight:700;color:var(--plum);margin-bottom:8px;">Create your profile</div>
+      <p style="font-size:13px;color:var(--mid);">Build a beautiful portfolio profile showcasing your best work, specialties, rates, and location. Free to join.</p>
+    </div>
+    <div class="card">
+      <div class="icon-box ib-rose"><span>📍</span></div>
+      <div style="font-family:var(--serif);font-size:17px;font-weight:700;color:var(--plum);margin-bottom:8px;">Get found locally</div>
+      <p style="font-size:13px;color:var(--mid);">Clients in your city search for stitchers by specialty and location. Your profile appears in their results instantly.</p>
+    </div>
+    <div class="card">
+      <div class="icon-box ib-gold"><span>💰</span></div>
+      <div style="font-family:var(--serif);font-size:17px;font-weight:700;color:var(--plum);margin-bottom:8px;">Grow your income</div>
+      <p style="font-size:13px;color:var(--mid);">Pro members see 3× more enquiries on average. Upgrade anytime — cancel anytime. No long-term contracts.</p>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:36px;"><a href="index.html" class="btn">Join as a Stitcher — Free</a></div>
+</div></div>
+
+<div class="s"><div class="c" style="text-align:center;">
+  <h2 class="st">Frequently asked questions</h2>
+  <div style="max-width:680px;margin:32px auto 0;text-align:left;display:flex;flex-direction:column;gap:16px;">
+    <div class="card"><div style="font-weight:700;color:var(--plum);margin-bottom:6px;">Is Stitchers free for clients?</div><p style="font-size:13px;color:var(--mid);">Yes — browsing profiles, messaging stitchers, and posting projects is completely free for clients. You pay the stitcher directly for their work.</p></div>
+    <div class="card"><div style="font-weight:700;color:var(--plum);margin-bottom:6px;">How does Stitchers make money?</div><p style="font-size:13px;color:var(--mid);">Stitchers earns through optional Pro and Studio memberships for stitchers who want more visibility and features. Clients always use Stitchers free.</p></div>
+    <div class="card"><div style="font-weight:700;color:var(--plum);margin-bottom:6px;">Are stitchers verified?</div><p style="font-size:13px;color:var(--mid);">All stitchers are real people who create accounts and build their profiles. Pro members display a Verified badge after manual review. Client reviews provide ongoing accountability.</p></div>
+    <div class="card"><div style="font-weight:700;color:var(--plum);margin-bottom:6px;">What if I'm not happy with the work?</div><p style="font-size:13px;color:var(--mid);">We encourage open communication between clients and stitchers before booking. If issues arise, contact us at <a href="mailto:hello@stitchers.ca" style="color:var(--plum);">hello@stitchers.ca</a> and we'll help resolve them.</p></div>
+  </div>
+</div></div>
+
+<footer><div class="fi2">
+  <div class="fg2">
+    <div class="fb"><div class="fl2"><div class="flm">🧵</div><span class="flt">Stitchers</span></div><p>Canada's community for seamstresses, dressmakers, and garment restoration specialists. 🍁</p></div>
+    <div class="fc"><h4>For Clients</h4><a href="find.html">Find a Stitcher</a><a href="specialties.html">Browse Specialties</a><a href="how-it-works.html">How It Works</a><a href="post-project.html">Post a Project</a><a href="gift-cards.html">Gift Cards</a></div>
+    <div class="fc"><h4>For Stitchers</h4><a href="index.html">Join Free</a><a href="pro.html">Pro Membership</a><a href="studio.html">Studio Plan</a><a href="resources.html">Resources</a><a href="guidelines.html">Community Guidelines</a></div>
+    <div class="fc"><h4>Company</h4><a href="about.html">About Us</a><a href="blog.html">Blog</a><a href="press.html">Press</a><a href="careers.html">Careers</a><a href="contact.html">Contact</a><a href="privacy.html">Privacy Policy</a></div>
+  </div>
+  <div class="fb2"><span>© 2026 Stitchers Canada Inc. All rights reserved. Made with <span class="maple">♥</span> in Canada.</span><span>English · Français</span></div>
+</div></footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.js"></script>
+<script>
+(async()=>{const sb=supabase.createClient('https://juyljsaqqkymtfvlftgo.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp1eWxqc2FxcWt5bXRmdmxmdGdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE5OTgzNDEsImV4cCI6MjEwNzU3NDM0MX0.3ZU35hBkfctK085y7160peLDqNxkzoo97hVumd06fuo');const{data:{session}}=await sb.auth.getSession();const el=document.getElementById('nc');if(session&&el){const n=session.user.user_metadata?.first_name||'My Account';el.innerHTML=`<button class="bg" onclick="location.href='dashboard.html'">${n}'s Dashboard</button><button class="bp" onclick="sb.auth.signOut().then(()=>location.reload())">Sign Out</button>`;}} )();
+</script>
+</body>
+</html>
