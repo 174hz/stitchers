@@ -156,5 +156,6 @@ footer{background:#2C2C2C;padding:52px 0 28px;}
 <script>
 (async()=>{const sb=supabase.createClient('https://juyljsaqqkymtfvlftgo.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp1eWxqc2FxcWt5bXRmdmxmdGdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE5OTgzNDEsImV4cCI6MjEwNzU3NDM0MX0.3ZU35hBkfctK085y7160peLDqNxkzoo97hVumd06fuo');const{data:{session}}=await sb.auth.getSession();const el=document.getElementById('nc');if(session&&el){const n=session.user.user_metadata?.first_name||'My Account';el.innerHTML=`<button class="bg" onclick="location.href='dashboard.html'">${n}'s Dashboard</button><button class="bp" onclick="sb.auth.signOut().then(()=>location.reload())">Sign Out</button>`;}} )();
 </script>
+<script src="i18n.js"></script>
 </body>
 </html>
