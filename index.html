@@ -623,6 +623,7 @@ async function completeSignup() {
     // 2. Create profile record
     const profilePayload = {
       id:            userId,
+      email:         S.data.email,
       account_type:  S.accountType,
       first_name:    S.data.firstName,
       last_name:     S.data.lastName,
@@ -635,7 +636,7 @@ async function completeSignup() {
       profilePayload.bio           = S.data.bio || null;
       profilePayload.hourly_rate   = S.data.rate ? parseFloat(S.data.rate) : null;
     }
-    const { error: profileErr } = await sb.from('profiles').insert(profilePayload);
+    const { error: profileErr } = await sb.from('profiles').upsert(profilePayload);
     if (profileErr) console.warn('Profile insert warning:', profileErr.message);
 
     // 3. Insert specialties if stitcher
