@@ -901,6 +901,31 @@ async function sendNewMessage() {
   toast('Message sent!', 'ok');
 }
 
+// Live message updates: refresh the inbox the moment a message arrives
+(function liveMessages() {
+  const timer = setInterval(() => {
+    if (!U) return;
+    clearInterval(timer);
+    sb.channel('dash-msgs-' + U.id)
+      .on('postgres_changes',
+        { event: '*', schema: 'public', table: 'messages', filter: 'recipient_id=eq.' + U.id },
+        () => loadMessages())
+      .subscribe();
+  }, 500);
+})();
+
+// Top-bar Messages link opens the inbox directly
+(function openPanelFromUrl() {
+  const wanted = new URLSearchParams(location.search).get('panel');
+  const valid = ['overview', 'profile', 'photos', 'messages', 'reviews', 'projects', 'plan', 'settings'];
+  if (!wanted || !valid.includes(wanted)) return;
+  const timer = setInterval(() => {
+    if (!U || !P) return;
+    clearInterval(timer);
+    showPanel(wanted);
+  }, 300);
+})();
+
 // Check for new messages every 20 seconds
 setInterval(() => { if (U) loadMessages(); }, 20000);
 
