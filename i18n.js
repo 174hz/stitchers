@@ -120,6 +120,7 @@
     '.sfx-btn:hover{background:rgba(255,255,255,0.12);}' +
     '.sfx-banner{background:#F5F0F8;border-bottom:1px solid #E8E0D8;color:#4A2040;font-family:Inter,system-ui,sans-serif;font-size:14px;padding:12px 24px;display:flex;justify-content:center;align-items:center;gap:16px;flex-wrap:wrap;}' +
     '.sfx-banner a{color:#4A2040;font-weight:600;}' +
+    '.sfx-badge{display:none;background:#C4716A;color:#fff;border-radius:100px;font-size:11px;font-weight:700;padding:1px 7px;margin-left:6px;}' +
     '@media(max-width:900px){footer#site-footer .sf-grid{grid-template-columns:1fr 1fr;}}';
 
   var FOOTER_HTML =
@@ -162,6 +163,28 @@
     document.head.appendChild(s);
   }
 
+  var currentUid = null;
+
+  function refreshUnread() {
+    if (!sb || !currentUid) return;
+    sb.from('messages').select('id', { count: 'exact', head: true })
+      .eq('recipient_id', currentUid).eq('is_read', false)
+      .then(function (r) {
+        var n = r.count || 0;
+        var el = document.getElementById('sfx-unread');
+        if (el) { el.textContent = n; el.style.display = n ? 'inline-block' : 'none'; }
+        document.title = (n ? '(' + n + ') ' : '') + document.title.replace(/^\(\d+\) /, '');
+      });
+  }
+
+  function subscribeMessages(uid) {
+    sb.channel('sfx-msgs-' + uid)
+      .on('postgres_changes',
+        { event: '*', schema: 'public', table: 'messages', filter: 'recipient_id=eq.' + uid },
+        function () { refreshUnread(); })
+      .subscribe();
+  }
+
   function showSignedIn(session) {
     var area = document.querySelector('#nc, #nav-ctas, .nc, .nav-ctas');
     if (!area) return;
@@ -182,7 +205,8 @@
           '<a href="dashboard.html" title="' + (fr ? 'Tableau de bord' : 'Dashboard') + '" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff;">' +
             '<span style="width:34px;height:34px;border-radius:50%;overflow:hidden;background:#C4716A;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;border:2px solid rgba(255,255,255,0.35);">' + avatar + '</span>' +
             '<span style="font-size:13px;font-weight:600;">' + esc(name) + '</span></a>' +
-          '<a class="sfx-btn" href="dashboard.html">' + (fr ? 'Tableau de bord' : 'Dashboard') + '</a>' +
+    '<a class="sfx-btn" href="dashboard.html?panel=messages">Messages <span id="sfx-unread" class="sfx-badge"></span></a>' +
+                '<a class="sfx-btn" href="dashboard.html">' + (fr ? 'Tableau de bord' : 'Dashboard') + '</a>' +
           '<button class="sfx-btn" data-signout>' + (fr ? 'Se déconnecter' : 'Sign Out') + '</button>';
         area.style.display = 'flex';
         area.style.alignItems = 'center';
@@ -191,6 +215,9 @@
           sb.auth.signOut().then(function () { location.href = 'home.html'; });
         };
         applyLanguage(getLang());
+        currentUid = user.id;
+        refreshUnread();
+        subscribeMessages(user.id);
       });
   }
 
