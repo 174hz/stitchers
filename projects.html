@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stitchers — Open Projects</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.js"></script>
+<style>
+:root{--cream:#FAF7F2;--warm:#FFFDF9;--rose:#C4716A;--plum:#4A2040;--char:#2C2C2C;--mid:#666;--light:#999;--border:#E8E0D8;--serif:'Playfair Display',Georgia,serif;--sans:'Inter',system-ui,sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--cream);color:var(--char);font-family:var(--sans);font-size:15px;line-height:1.6;min-height:100vh;display:flex;flex-direction:column}
+nav{background:var(--plum);border-bottom:3px solid var(--rose)}
+.ni{max-width:1200px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{font-family:var(--serif);font-size:20px;font-weight:700;color:#fff;text-decoration:none}
+.nl{display:flex;gap:22px}.nl a{color:rgba(255,255,255,.75);text-decoration:none;font-size:13px;font-weight:500}
+.wrap{max-width:900px;margin:0 auto;padding:40px 24px 60px;width:100%;flex:1}
+h1{font-family:var(--serif);font-size:32px;color:var(--plum);margin-bottom:8px}
+.sub{color:var(--mid);margin-bottom:22px}
+.filters{display:flex;gap:12px;margin-bottom:22px;flex-wrap:wrap}
+.fi{border:1.5px solid var(--border);border-radius:10px;padding:10px 13px;font-family:var(--sans);font-size:14px;background:#fff;outline:none;min-width:220px}
+.card{background:var(--warm);border:1px solid var(--border);border-radius:14px;padding:22px 24px;margin-bottom:16px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.top{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap}
+.title{font-family:var(--serif);font-size:20px;color:var(--plum);font-weight:700}
+.tag{display:inline-block;background:#F0EAF4;color:var(--plum);font-size:11px;font-weight:600;padding:3px 10px;border-radius:100px;margin-top:6px}
+.meta{font-size:13px;color:var(--mid);margin-top:10px;display:flex;gap:16px;flex-wrap:wrap}
+.desc{margin-top:12px;color:#444;white-space:pre-wrap}
+.foot{display:flex;justify-content:space-between;align-items:center;margin-top:16px;gap:12px;flex-wrap:wrap;border-top:1px solid var(--border);padding-top:14px}
+.muted{font-size:13px;color:var(--light)}
+.btn{background:var(--rose);color:#fff;border:none;border-radius:100px;padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--sans)}
+.link{color:var(--plum);font-weight:600;font-size:13px}
+.empty{text-align:center;padding:50px 20px;color:var(--mid)}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;padding:20px;z-index:300}
+.ov.show{display:flex}
+.modal{background:#fff;border-radius:16px;padding:26px;max-width:480px;width:100%}
+.modal h3{font-family:var(--serif);color:var(--plum);margin-bottom:12px}
+.modal textarea{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:10px 13px;font-family:var(--sans);font-size:14px;resize:vertical;outline:none}
+.mrow{display:flex;gap:10px;justify-content:flex-end;margin-top:14px}
+.gbtn{background:var(--cream);color:var(--mid);border:1px solid var(--border);border-radius:100px;padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--sans)}
+@media(max-width:700px){.nl{display:none}}
+</style>
+</head>
+<body>
+<nav><div class="ni">
+  <a class="logo" href="home.html">🧵 Stitchers</a>
+  <div class="nl"><a href="find.html">Find a Stitcher</a><a href="projects.html">Projects</a><a href="post-project.html">Post a Project</a></div>
+  <div id="nc"><a href="index.html" style="color:#fff;border:1.5px solid rgba(255,255,255,.4);border-radius:100px;padding:7px 16px;font-size:13px;font-weight:600;text-decoration:none">Sign In</a></div>
+</div></nav>
+
+<div class="wrap">
+  <h1>Open projects</h1>
+  <p class="sub">Clients looking for sewing help. Message a client through Stitchers to offer your services. Their contact details are shared only if they reply.</p>
+  <div class="filters">
+    <select class="fi" id="f-spec"></select>
+    <select class="fi" id="f-prov"></select>
+  </div>
+  <div id="list"><div class="empty">Loading projects…</div></div>
+</div>
+
+<div class="ov" id="ov">
+  <div class="modal">
+    <h3 id="m-title">Message client</h3>
+    <textarea id="m-body" rows="5" placeholder="Introduce yourself, say what you can offer, and ask any questions"></textarea>
+    <div id="m-status" style="font-size:13px;margin-top:10px;min-height:18px"></div>
+    <div class="mrow">
+      <button class="gbtn" onclick="closeMsg()">Cancel</button>
+      <button class="btn" id="m-send" onclick="sendMsg()">Send message</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const sb = supabase.createClient('https://juyljsaqqkymtfvlftgo.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp1eWxqc2FxcWt5bXRmdmxmdGdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE5OTgzNDEsImV4cCI6MjEwNzU3NDM0MX0.3ZU35hBkfctK085y7160peLDqNxkzoo97hVumd06fuo');
+
+const SPECS = ['Bridal & Formal Wear','Alterations & Tailoring','Custom Design & Dressmaking','Restoration & Upcycling','Costumes & Theatrical','Knitwear & Specialty Fabrics','Menswear & Suits','Childrenswear','Home Textiles'];
+const PROVS = ['Ontario','Québec','British Columbia','Alberta','Manitoba','Saskatchewan','Nova Scotia','New Brunswick','Newfoundland and Labrador','Prince Edward Island','Northwest Territories','Yukon','Nunavut'];
+
+let me = null, projects = [], active = null;
+
+function esc(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function fill(id, items, placeholder) {
+  const sel = document.getElementById(id);
+  sel.innerHTML = '';
+  const first = document.createElement('option');
+  first.value = ''; first.textContent = placeholder;
+  sel.appendChild(first);
+  items.forEach(v => { const o = document.createElement('option'); o.value = v; o.textContent = v; sel.appendChild(o); });
+}
+fill('f-spec', SPECS, 'All specialties');
+fill('f-prov', PROVS, 'All provinces');
+document.getElementById('f-spec').onchange = load;
+document.getElementById('f-prov').onchange = load;
+
+async function load() {
+  const { data: { session } } = await sb.auth.getSession();
+  me = session ? session.user : null;
+
+  let q = sb.from('projects')
+    .select('*, profiles(first_name, last_name, business_name)')
+    .eq('status', 'open')
+    .order('created_at', { ascending: false });
+  const spec = document.getElementById('f-spec').value;
+  const prov = document.getElementById('f-prov').value;
+  if (spec) q = q.eq('specialty', spec);
+  if (prov) q = q.eq('province', prov);
+
+  const { data, error } = await q;
+  if (error) {
+    document.getElementById('list').innerHTML = '<div class="empty">Could not load projects: ' + esc(error.message) + '</div>';
+    return;
+  }
+  projects = data || [];
+  render();
+}
+
+function render() {
+  const list = document.getElementById('list');
+  if (!projects.length) {
+    list.innerHTML = '<div class="empty">No open projects match these filters yet.</div>';
+    return;
+  }
+  list.innerHTML = projects.map(p => {
+    const client = p.profiles
+      ? (p.profiles.business_name || [p.profiles.first_name, p.profiles.last_name].filter(Boolean).join(' ') || 'Client')
+      : 'Client';
+    const posted = new Date(p.created_at).toLocaleDateString('en-CA', { month: 'short', day: 'numeric' });
+    let action;
+    if (me && me.id === p.client_id) action = '<span class="muted">This is your project</span>';
+    else if (!me) action = '<a class="link" href="index.html">Sign in to message this client</a>';
+    else action = '<button class="btn" onclick="openMsg(\'' + p.id + '\')">Message client</button>';
+    return `<div class="card">
+      <div class="top">
+        <div>
+          <div class="title">${esc(p.title)}</div>
+          <span class="tag">${esc(p.specialty)}</span>
+        </div>
+        <div class="muted">Posted ${posted}</div>
+      </div>
+      <div class="meta">
+        <span>📍 ${esc(p.city)}, ${esc(p.province)}</span>
+        ${p.budget ? `<span>💰 ${esc(p.budget)}</span>` : ''}
+        ${p.timeline ? `<span>🗓 ${esc(p.timeline)}</span>` : ''}
+        <span>👤 ${esc(client)}</span>
+      </div>
+      <div class="desc">${esc(p.description)}</div>
+      <div class="foot">${action}</div>
+    </div>`;
+  }).join('');
+}
+
+function openMsg(id) {
+  active = projects.find(p => p.id === id);
+  if (!active) return;
+  document.getElementById('m-title').textContent = 'Message client about: ' + active.title;
+  document.getElementById('m-body').value = '';
+  document.getElementById('m-status').textContent = '';
+  document.getElementById('ov').classList.add('show');
+}
+function closeMsg() { document.getElementById('ov').classList.remove('show'); }
+
+async function sendMsg() {
+  const status = document.getElementById('m-status');
+  const body = document.getElementById('m-body').value.trim();
+  if (!body) { status.style.color = '#C8102E'; status.textContent = 'Please write a message first.'; return; }
+  if (!me) { location.href = 'index.html'; return; }
+  const btn = document.getElementById('m-send');
+  btn.disabled = true; btn.textContent = 'Sending…';
+  const { error } = await sb.from('messages').insert({
+    sender_id: me.id,
+    recipient_id: active.client_id,
+    subject: 'Re: ' + active.title,
+    message_text: body,
+    is_read: false
+  });
+  btn.disabled = false; btn.textContent = 'Send message';
+  if (error) { status.style.color = '#C8102E'; status.textContent = 'Could not send: ' + error.message; return; }
+  status.style.color = '#6B8F71';
+  status.textContent = 'Message sent. The client will see it in their inbox.';
+  setTimeout(closeMsg, 1400);
+}
+
+load();
+</script>
+<script src="i18n.js"></script>
+</body>
+</html>
