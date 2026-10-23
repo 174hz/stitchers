@@ -1,177 +1,137 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-CA">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Stitchers — Post a Project</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.js"></script>
 <style>
-:root{--cream:#FAF7F2;--warm:#FFFDF9;--blush:#F2D9D0;--rose:#C4716A;--rose-d:#A0524A;--rose-l:#EAA99F;--plum:#4A2040;--plum-l:#7A3A60;--gold:#C9A84C;--sage:#6B8F71;--char:#2C2C2C;--mid:#666;--light:#999;--border:#E8E0D8;--serif:'Playfair Display',Georgia,serif;--sans:'Inter',system-ui,sans-serif;--sh:0 2px 12px rgba(0,0,0,0.07);}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--cream);color:var(--char);font-family:var(--sans);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;}
-nav{background:var(--plum);border-bottom:3px solid var(--rose);position:sticky;top:0;z-index:100;}
-.ni{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:64px;}
-.logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
-.lm{width:32px;height:32px;background:var(--rose);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;}
-.lt{font-family:var(--serif);font-size:20px;font-weight:700;color:white;}
-.nl{display:flex;align-items:center;gap:22px;}
-.nl a{color:rgba(255,255,255,0.75);text-decoration:none;font-size:13px;font-weight:500;}
-.nl a:hover{color:white;}
-.nc{display:flex;gap:10px;}
-.bg{border:1.5px solid rgba(255,255,255,0.4);color:white;background:none;border-radius:100px;padding:8px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--sans);}
-.bp{background:var(--rose);color:white;border:none;border-radius:100px;padding:9px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--sans);}
-.c{max-width:1200px;margin:0 auto;padding:0 24px;}
-.s{padding:64px 0;}
-.sa{background:var(--warm);}
-h1.pt{font-family:var(--serif);font-size:clamp(28px,4vw,46px);font-weight:700;color:var(--plum);letter-spacing:-0.02em;line-height:1.15;margin-bottom:14px;}
-h2.st{font-family:var(--serif);font-size:clamp(22px,3vw,34px);font-weight:700;color:var(--plum);letter-spacing:-0.02em;line-height:1.2;margin-bottom:10px;}
-.ey{font-size:11px;font-weight:700;color:var(--rose);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;}
-.sub{font-size:16px;color:var(--mid);line-height:1.7;max-width:560px;}
-.hero{background:var(--plum);padding:72px 0;}
-.hero h1{color:white;}
-.hero em{font-style:italic;color:var(--rose-l);}
-.hero .sub{color:rgba(255,255,255,0.65);}
-.btn{background:var(--plum);color:white;border:none;border-radius:100px;padding:13px 28px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--sans);text-decoration:none;display:inline-block;transition:background 0.15s;}
-.btn:hover{background:var(--plum-l);}
-.btn-rose{background:var(--rose);}
-.btn-rose:hover{background:var(--rose-d);}
-.btn-outline{background:none;border:1.5px solid var(--plum);color:var(--plum);}
-.card{background:var(--warm);border-radius:14px;border:1px solid var(--border);padding:24px;box-shadow:var(--sh);}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
-.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
-.icon-box{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;}
-.ib-rose{background:#FEF0EE;}
-.ib-plum{background:#F0EAF4;}
-.ib-gold{background:#FDF6E3;}
-.ib-sage{background:#EEF5EF;}
-.fi{width:100%;background:white;border:1.5px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--char);font-family:var(--sans);font-size:14px;outline:none;transition:border-color 0.15s;}
-.fi:focus{border-color:var(--plum);box-shadow:0 0 0 3px rgba(74,32,64,0.08);}
-.fi::placeholder{color:var(--light);}
-.fg{margin-bottom:16px;}
-.fl{display:block;font-size:12px;font-weight:600;color:var(--char);margin-bottom:5px;}
-textarea.fi{resize:vertical;}
-footer{background:#2C2C2C;padding:52px 0 28px;}
-.fi2{max-width:1200px;margin:0 auto;padding:0 24px;}
-.fg2{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:36px;}
-.fb p{font-size:13px;color:rgba(255,255,255,0.45);line-height:1.65;margin-top:10px;max-width:220px;}
-.fl2{display:flex;align-items:center;gap:10px;}
-.flm{width:28px;height:28px;background:var(--rose);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;}
-.flt{font-family:var(--serif);font-size:18px;font-weight:700;color:white;}
-.fc h4{font-size:11px;font-weight:700;color:rgba(255,255,255,0.4);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:14px;}
-.fc a{display:block;font-size:13px;color:rgba(255,255,255,0.6);text-decoration:none;margin-bottom:8px;}
-.fc a:hover{color:white;}
-.fb2{border-top:1px solid rgba(255,255,255,0.08);padding-top:20px;display:flex;justify-content:space-between;font-size:12px;color:rgba(255,255,255,0.35);}
-.maple{color:var(--rose);}
-@media(max-width:900px){.fg2{grid-template-columns:1fr 1fr;}.grid3,.grid4{grid-template-columns:1fr 1fr;}.nl{display:none;}}
-@media(max-width:540px){.grid2,.grid3,.grid4{grid-template-columns:1fr;}}
+:root{--cream:#FAF7F2;--warm:#FFFDF9;--rose:#C4716A;--plum:#4A2040;--plum-l:#7A3A60;--char:#2C2C2C;--mid:#666;--light:#999;--border:#E8E0D8;--serif:'Playfair Display',Georgia,serif;--sans:'Inter',system-ui,sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--cream);color:var(--char);font-family:var(--sans);font-size:15px;line-height:1.6;min-height:100vh;display:flex;flex-direction:column}
+nav{background:var(--plum);border-bottom:3px solid var(--rose)}
+.ni{max-width:1200px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{font-family:var(--serif);font-size:20px;font-weight:700;color:#fff;text-decoration:none}
+.nl{display:flex;gap:22px}.nl a{color:rgba(255,255,255,.75);text-decoration:none;font-size:13px;font-weight:500}
+.wrap{max-width:680px;margin:0 auto;padding:40px 24px 60px;width:100%;flex:1}
+h1{font-family:var(--serif);font-size:32px;color:var(--plum);margin-bottom:8px}
+.sub{color:var(--mid);margin-bottom:24px}
+.card{background:var(--warm);border:1px solid var(--border);border-radius:14px;padding:26px;box-shadow:0 2px 12px rgba(0,0,0,.07)}
+.gate{text-align:center;padding:36px 20px}
+.fg{margin-bottom:16px}
+.fl{display:block;font-size:12px;font-weight:600;margin-bottom:5px}
+.fi{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:10px 13px;font-family:var(--sans);font-size:14px;background:#fff;outline:none}
+.fi:focus{border-color:var(--plum)}
+textarea.fi{resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.btn{background:var(--rose);color:#fff;border:none;border-radius:100px;padding:13px;width:100%;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--sans)}
+.btn:disabled{opacity:.6;cursor:default}
+.bp{display:inline-block;background:var(--plum);color:#fff;padding:12px 26px;border-radius:100px;text-decoration:none;font-weight:600;margin:6px 4px 0}
+.bo{display:inline-block;background:#fff;color:var(--plum);border:1.5px solid var(--plum);padding:11px 25px;border-radius:100px;text-decoration:none;font-weight:600;margin:6px 4px 0}
+.err{color:#C8102E;font-size:13px;margin-bottom:12px;display:none}
+@media(max-width:600px){.row{grid-template-columns:1fr}.nl{display:none}}
 </style>
 </head>
 <body>
 <nav><div class="ni">
-  <a href="home.html" class="logo"><div class="lm">🧵</div><span class="lt">Stitchers</span></a>
-  <div class="nl"><a href="find.html">Find a Stitcher</a><a href="specialties.html">Specialties</a><a href="how-it-works.html">How It Works</a><a href="post-project.html">Post a Project</a></div>
-  <div class="nc" id="nc"><button class="bg" onclick="location.href='index.html'">Sign In</button><button class="bp" onclick="location.href='index.html'">Join Free</button></div>
+  <a class="logo" href="home.html">🧵 Stitchers</a>
+  <div class="nl"><a href="find.html">Find a Stitcher</a><a href="projects.html">Projects</a><a href="post-project.html">Post a Project</a></div>
+  <div id="nc"><a href="index.html" style="color:#fff;border:1.5px solid rgba(255,255,255,.4);border-radius:100px;padding:7px 16px;font-size:13px;font-weight:600;text-decoration:none">Sign In</a></div>
 </div></nav>
 
-<div class="hero"><div class="c" style="text-align:center;">
-  <div class="ey">Post a Project</div>
-  <h1 class="pt" style="color:white;margin-bottom:12px;">Describe your project — <em>stitchers come to you</em></h1>
-  <p class="sub" style="color:rgba(255,255,255,0.65);margin:0 auto;">Post your sewing project for free. Skilled stitchers in your area will reach out with quotes and availability.</p>
-</div></div>
+<div class="wrap">
+  <div id="gate" class="card gate" style="display:none">
+    <h1>Sign in to post a project</h1>
+    <p class="sub">You need a Stitchers account so stitchers can message you through the platform. Your email is never shown.</p>
+    <a class="bp" href="index.html">Sign in or join free</a>
+  </div>
 
-<div class="s"><div class="c" style="max-width:680px;">
-  <div id="form-wrap">
-    <div class="card" style="margin-bottom:20px;background:linear-gradient(135deg,rgba(74,32,64,0.04),transparent);border-color:var(--plum);">
-      <div style="display:flex;gap:14px;align-items:flex-start;">
-        <div style="font-size:28px;">💡</div>
-        <div><div style="font-weight:700;color:var(--plum);margin-bottom:4px;">How it works</div><p style="font-size:13px;color:var(--mid);">Fill in your project details below. Stitchers matching your needs will message you directly through the platform. It's free and takes less than 2 minutes.</p></div>
-      </div>
-    </div>
+  <div id="form-view" style="display:none">
+    <h1>Post a project</h1>
+    <p class="sub">Describe what you need sewn. Stitchers in your area will message you through Stitchers. Your contact details are never shown.</p>
     <div class="card">
-      <div style="font-family:var(--serif);font-size:20px;font-weight:700;color:var(--plum);margin-bottom:4px;">Project Details</div>
-      <p style="font-size:13px;color:var(--light);margin-bottom:20px;">Tell stitchers what you need</p>
-      <form onsubmit="submitProject(event)">
-        <div class="fg"><label class="fl">Project title <span style="color:var(--rose);">*</span></label><input type="text" class="fi" id="proj-title" placeholder="e.g. Wedding dress alterations, custom jacket, costume..."></div>
-        <div class="fg"><label class="fl">Specialty needed <span style="color:var(--rose);">*</span></label>
-          <select class="fi" id="proj-spec">
-            <option value="">Select a specialty...</option>
-            <option>Bridal &amp; Formal Wear</option><option>Alterations &amp; Tailoring</option>
-            <option>Custom Design &amp; Dressmaking</option><option>Restoration &amp; Upcycling</option>
-            <option>Costumes &amp; Theatrical</option><option>Knitwear &amp; Specialty Fabrics</option>
-            <option>Menswear &amp; Suits</option><option>Childrenswear</option><option>Home Textiles</option>
-          </select>
+      <form id="f">
+        <div class="fg"><label class="fl" for="p-title">Project title</label><input class="fi" id="p-title" required maxlength="120" placeholder="e.g. Wedding dress alterations"></div>
+        <div class="fg"><label class="fl" for="p-spec">Specialty</label><select class="fi" id="p-spec" required></select></div>
+        <div class="fg"><label class="fl" for="p-desc">Describe the project</label><textarea class="fi" id="p-desc" rows="5" required maxlength="2000" placeholder="Fabric, measurements, what needs doing…"></textarea></div>
+        <div class="row">
+          <div class="fg"><label class="fl" for="p-city">City</label><input class="fi" id="p-city" required maxlength="80"></div>
+          <div class="fg"><label class="fl" for="p-prov">Province</label><select class="fi" id="p-prov" required></select></div>
         </div>
-        <div class="fg"><label class="fl">Project description <span style="color:var(--rose);">*</span></label><textarea class="fi" id="proj-desc" rows="5" placeholder="Describe your project in detail — fabric type, measurements, timeline, any special requirements..."></textarea></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-          <div class="fg"><label class="fl">Your city <span style="color:var(--rose);">*</span></label><input type="text" class="fi" id="proj-city" placeholder="e.g. Toronto"></div>
-          <div class="fg"><label class="fl">Province <span style="color:var(--rose);">*</span></label>
-            <select class="fi" id="proj-prov">
-              <option value="">Select...</option>
-              <option>Ontario</option><option>Québec</option><option>British Columbia</option>
-              <option>Alberta</option><option>Manitoba</option><option>Saskatchewan</option>
-              <option>Nova Scotia</option><option>New Brunswick</option><option>Newfoundland and Labrador</option>
-              <option>Prince Edward Island</option><option>Yukon</option><option>Northwest Territories</option><option>Nunavut</option>
-            </select>
-          </div>
+        <div class="row">
+          <div class="fg"><label class="fl" for="p-budget">Budget (optional)</label><input class="fi" id="p-budget" maxlength="60" placeholder="e.g. $100 to $300"></div>
+          <div class="fg"><label class="fl" for="p-time">Timeline (optional)</label><input class="fi" id="p-time" maxlength="60" placeholder="e.g. Ready by Dec 15"></div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-          <div class="fg"><label class="fl">Budget (optional)</label><input type="text" class="fi" id="proj-budget" placeholder="e.g. $100–$300"></div>
-          <div class="fg"><label class="fl">Timeline (optional)</label><input type="text" class="fi" id="proj-timeline" placeholder="e.g. Ready by Dec 15"></div>
-        </div>
-        <div class="fg"><label class="fl">Your email <span style="color:var(--rose);">*</span></label><input type="email" class="fi" id="proj-email" placeholder="you@example.com"><p style="font-size:11px;color:var(--light);margin-top:4px;">Used only so stitchers can contact you — never shared publicly.</p></div>
-        <div id="proj-err" style="color:var(--rose);font-size:13px;margin-bottom:12px;display:none;"></div>
-        <button type="submit" class="btn btn-rose" style="width:100%;padding:14px;" id="proj-btn">Post My Project — Free</button>
+        <div class="err" id="err"></div>
+        <button class="btn" id="btn" type="submit">Post my project, free</button>
       </form>
     </div>
   </div>
-  <div id="success-wrap" style="display:none;">
-    <div class="card" style="text-align:center;padding:48px 32px;">
-      <div style="font-size:56px;margin-bottom:16px;">🎉</div>
-      <div style="font-family:var(--serif);font-size:24px;font-weight:700;color:var(--plum);margin-bottom:10px;">Project posted!</div>
-      <p style="font-size:14px;color:var(--mid);margin-bottom:28px;">Skilled stitchers in your area can now see your project and will reach out to you directly. Keep an eye on your inbox!</p>
-      <a href="find.html" class="btn" style="margin-right:10px;">Browse Stitchers</a>
-      <a href="home.html" class="btn btn-outline" style="border:1.5px solid var(--plum);color:var(--plum);background:none;">Back to Home</a>
-    </div>
+
+  <div id="done-view" class="card gate" style="display:none">
+    <h1>Project posted</h1>
+    <p class="sub">Stitchers can now see your project and message you. Replies arrive in your inbox on the dashboard.</p>
+    <a class="bp" href="projects.html">View open projects</a>
+    <a class="bo" href="dashboard.html">Go to dashboard</a>
   </div>
-</div></div>
+</div>
 
 <script>
-async function submitProject(e) {
-  e.preventDefault();
-  const title = document.getElementById('proj-title').value.trim();
-  const spec  = document.getElementById('proj-spec').value;
-  const desc  = document.getElementById('proj-desc').value.trim();
-  const city  = document.getElementById('proj-city').value.trim();
-  const prov  = document.getElementById('proj-prov').value;
-  const email = document.getElementById('proj-email').value.trim();
-  const err   = document.getElementById('proj-err');
-  if (!title || !spec || !desc || !city || !prov || !email) {
-    err.style.display='block'; err.textContent='Please fill in all required fields.'; return;
-  }
-  err.style.display='none';
-  const btn = document.getElementById('proj-btn');
-  btn.disabled=true; btn.textContent='Posting...';
-  // In production this would insert to a projects table in Supabase
-  setTimeout(() => {
-    document.getElementById('form-wrap').style.display='none';
-    document.getElementById('success-wrap').style.display='block';
-  }, 1200);
+const sb = supabase.createClient('https://juyljsaqqkymtfvlftgo.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp1eWxqc2FxcWt5bXRmdmxmdGdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE5OTgzNDEsImV4cCI6MjEwNzU3NDM0MX0.3ZU35hBkfctK085y7160peLDqNxkzoo97hVumd06fuo');
+
+const SPECS = ['Bridal & Formal Wear','Alterations & Tailoring','Custom Design & Dressmaking','Restoration & Upcycling','Costumes & Theatrical','Knitwear & Specialty Fabrics','Menswear & Suits','Childrenswear','Home Textiles'];
+const PROVS = ['Ontario','Québec','British Columbia','Alberta','Manitoba','Saskatchewan','Nova Scotia','New Brunswick','Newfoundland and Labrador','Prince Edward Island','Northwest Territories','Yukon','Nunavut'];
+
+function fill(id, items, placeholder) {
+  const sel = document.getElementById(id);
+  sel.innerHTML = '';
+  const first = document.createElement('option');
+  first.value = ''; first.textContent = placeholder;
+  sel.appendChild(first);
+  items.forEach(v => { const o = document.createElement('option'); o.value = v; o.textContent = v; sel.appendChild(o); });
 }
-</script>
+fill('p-spec', SPECS, 'Select a specialty…');
+fill('p-prov', PROVS, 'Select a province…');
 
-<footer><div class="fi2">
-  <div class="fg2">
-    <div class="fb"><div class="fl2"><div class="flm">🧵</div><span class="flt">Stitchers</span></div><p>Canada's community for seamstresses, dressmakers, and garment restoration specialists. 🍁</p></div>
-    <div class="fc"><h4>For Clients</h4><a href="find.html">Find a Stitcher</a><a href="specialties.html">Browse Specialties</a><a href="how-it-works.html">How It Works</a><a href="post-project.html">Post a Project</a><a href="gift-cards.html">Gift Cards</a></div>
-    <div class="fc"><h4>For Stitchers</h4><a href="index.html">Join Free</a><a href="pro.html">Pro Membership</a><a href="studio.html">Studio Plan</a><a href="resources.html">Resources</a><a href="guidelines.html">Community Guidelines</a></div>
-    <div class="fc"><h4>Company</h4><a href="about.html">About Us</a><a href="blog.html">Blog</a><a href="press.html">Press</a><a href="careers.html">Careers</a><a href="contact.html">Contact</a><a href="privacy.html">Privacy Policy</a></div>
-  </div>
-  <div class="fb2"><span>© 2026 Stitchers Canada Inc. All rights reserved. Made with <span class="maple">♥</span> in Canada.</span><span>English · Français</span></div>
-</div></footer>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.js"></script>
-<script>
-(async()=>{const sb=supabase.createClient('https://juyljsaqqkymtfvlftgo.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp1eWxqc2FxcWt5bXRmdmxmdGdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE5OTgzNDEsImV4cCI6MjEwNzU3NDM0MX0.3ZU35hBkfctK085y7160peLDqNxkzoo97hVumd06fuo');const{data:{session}}=await sb.auth.getSession();const el=document.getElementById('nc');if(session&&el){const n=session.user.user_metadata?.first_name||'My Account';el.innerHTML=`<button class="bg" onclick="location.href='dashboard.html'">${n}'s Dashboard</button><button class="bp" onclick="sb.auth.signOut().then(()=>location.reload())">Sign Out</button>`;}} )();
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  document.getElementById(session ? 'form-view' : 'gate').style.display = 'block';
+})();
+
+document.getElementById('f').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const err = document.getElementById('err');
+  const btn = document.getElementById('btn');
+  err.style.display = 'none';
+
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { location.href = 'index.html'; return; }
+
+  const row = {
+    client_id: session.user.id,
+    title: document.getElementById('p-title').value.trim(),
+    specialty: document.getElementById('p-spec').value,
+    description: document.getElementById('p-desc').value.trim(),
+    city: document.getElementById('p-city').value.trim(),
+    province: document.getElementById('p-prov').value,
+    budget: document.getElementById('p-budget').value.trim() || null,
+    timeline: document.getElementById('p-time').value.trim() || null,
+    status: 'open'
+  };
+
+  btn.disabled = true; btn.textContent = 'Posting…';
+  const { error } = await sb.from('projects').insert(row);
+  if (error) {
+    err.textContent = 'Could not post your project: ' + error.message;
+    err.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Post my project, free';
+    return;
+  }
+  document.getElementById('form-view').style.display = 'none';
+  document.getElementById('done-view').style.display = 'block';
+});
 </script>
 <script src="i18n.js"></script>
 </body>
