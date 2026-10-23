@@ -230,6 +230,10 @@ select.fi{cursor:pointer;appearance:none;background-image:url("data:image/svg+xm
   .msg-list{display:none;}
   .frow{grid-template-columns:1fr;}
 }
+.plan-tag{display:inline-block;font-size:10px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:3px 10px;border-radius:100px;}
+.plan-tag.pro{background:linear-gradient(135deg,#C9A84C,#E8D5A0);color:#4A2040;}
+.plan-tag.studio{background:#4A2040;color:#E8D5A0;border:1px solid #C9A84C;}
+.plan-tag.free{background:#E8E0D8;color:#666;}
 </style>
 </head>
 <body>
@@ -283,6 +287,7 @@ select.fi{cursor:pointer;appearance:none;background-image:url("data:image/svg+xm
         <div class="sni" onclick="showPanel('photos')"><span class="ico">📸</span> Portfolio</div>
         <div class="sni" onclick="showPanel('messages')"><span class="ico">💬</span> Messages <span class="badge" id="msg-badge" style="display:none">0</span></div>
         <div class="sni" onclick="showPanel('reviews')"><span class="ico">⭐</span> Reviews</div>
+        <div class="sni" onclick="showPanel('projects')"><span class="ico">📋</span> My Projects</div>
         <div class="sni" onclick="showPanel('plan')"><span class="ico">💎</span> My Plan</div>
         <div class="sni" onclick="showPanel('settings')"><span class="ico">⚙️</span> Settings</div>
       </nav>
@@ -472,6 +477,16 @@ select.fi{cursor:pointer;appearance:none;background-image:url("data:image/svg+xm
         </div>
       </div>
 
+      <div class="panel" id="panel-projects">
+        <div class="card">
+          <div class="card-hd">
+            <div><div class="card-t">My Projects</div><div class="card-s">Projects you've posted. Stitchers message you through your inbox.</div></div>
+            <a href="post-project.html" class="btn-save btn-sm" style="text-decoration:none;">+ New project</a>
+          </div>
+          <div id="my-projects"></div>
+        </div>
+      </div>
+
       <!-- SETTINGS -->
       <div class="panel" id="panel-settings">
         <div class="card">
@@ -587,6 +602,7 @@ async function loadProfile() {
   document.getElementById('s-email').value = U.email;
   // Plan UI
   updatePlanUI(plan);
+  applyPlanBadges();
   // Load specialties
   const { data: specs } = await sb.from('stitcher_specialties').select('specialty').eq('profile_id', U.id);
   if (specs?.length) {
@@ -888,6 +904,48 @@ async function sendNewMessage() {
 // Check for new messages every 20 seconds
 setInterval(() => { if (U) loadMessages(); }, 20000);
 
+// ── MY PROJECTS ───────────────────────────────────────────────────────────
+async function loadMyProjects() {
+  const el = document.getElementById('my-projects');
+  if (!U || !el) return;
+  const { data, error } = await sb.from('projects').select('*')
+    .eq('client_id', U.id).order('created_at', { ascending: false });
+  if (error) {
+    el.innerHTML = '<div class="empty"><div class="empty-s">Could not load projects: ' + escapeHtml(error.message) + '</div></div>';
+    return;
+  }
+  if (!data || !data.length) {
+    el.innerHTML = '<div class="empty"><div class="empty-ico">📋</div><div class="empty-t">No projects yet</div><div class="empty-s">Post a project and stitchers in your area can message you.</div></div>';
+    return;
+  }
+  el.innerHTML = data.map(p => {
+    const posted = new Date(p.created_at).toLocaleDateString('en-CA', { month: 'short', day: 'numeric', year: 'numeric' });
+    const open = p.status === 'open';
+    return `<div class="review-item">
+      <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;">
+        <div>
+          <div style="font-family:var(--serif);font-size:17px;font-weight:700;color:var(--plum);">${escapeHtml(p.title)}</div>
+          <div class="card-s" style="margin-top:2px;">${escapeHtml(p.specialty)} · ${escapeHtml(p.city)}, ${escapeHtml(p.province)}</div>
+        </div>
+        <span class="plan-tag ${open ? 'pro' : 'free'}">${open ? 'Open' : 'Closed'}</span>
+      </div>
+      <div style="font-size:13px;color:var(--mid);margin-top:8px;white-space:pre-wrap;">${escapeHtml(p.description)}</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;flex-wrap:wrap;gap:10px;">
+        <span class="card-s">Posted ${posted}${p.budget ? ' · Budget ' + escapeHtml(p.budget) : ''}</span>
+        ${open ? `<button class="btn-danger" onclick="closeProject('${p.id}')">Close project</button>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function closeProject(id) {
+  if (!confirm('Close this project? It will no longer appear to stitchers.')) return;
+  const { error } = await sb.from('projects').update({ status: 'closed' }).eq('id', id).eq('client_id', U.id);
+  if (error) { toast('Could not close the project: ' + error.message, 'err'); return; }
+  toast('Project closed', 'ok');
+  loadMyProjects();
+}
+
 // ── REVIEWS ───────────────────────────────────────────────────────────────
 async function loadReviews() {
   const { data } = await sb.from('reviews').select('*').eq('stitcher_id', U.id).order('created_at', { ascending: false });
@@ -981,18 +1039,52 @@ async function callFn(name, body) {
   if (!r.ok) throw new Error(out.error || 'Something went wrong. Please try again.');
   return out;
 }
-async function upgradePlan(plan) {
+// Open the new tab straight away on click, so the browser doesn't block it
+async function openCheckoutTab(fn, body) {
+  const win = window.open('', '_blank');
   try {
-    const out = await callFn('create-checkout', { plan });
-    if (out) location.href = out.url;
-  } catch (e) { toast(e.message, 'err'); }
+    const out = await callFn(fn, body);
+    if (!out) { if (win) win.close(); return; }
+    if (win) win.location.href = out.url;
+    else window.open(out.url, '_blank');
+  } catch (e) {
+    if (win) win.close();
+    toast(e.message, 'err');
+  }
 }
-async function openBilling() {
-  try {
-    const out = await callFn('billing-portal', {});
-    if (out) location.href = out.url;
-  } catch (e) { toast(e.message, 'err'); }
+function upgradePlan(plan) { return openCheckoutTab('create-checkout', { plan }); }
+function openBilling() { return openCheckoutTab('billing-portal', {}); }
+
+// Clear plan labels in the top bar and sidebar
+function applyPlanBadges() {
+  const plan = (P && P.plan) || 'free';
+  const label = plan === 'studio' ? 'Studio' : plan === 'pro' ? 'Pro' : 'Free';
+  const nav = document.getElementById('nav-pl');
+  const side = document.getElementById('sb-badge');
+  if (nav) { nav.textContent = label; nav.className = 'plan-tag ' + plan; }
+  if (side) { side.textContent = label + ' plan'; side.className = 'plan-tag ' + plan; }
 }
+
+// Returning from Stripe: wait for the webhook to update the plan, then show it
+(function watchUpgrade() {
+  if (!new URLSearchParams(location.search).get('upgraded')) return;
+  toast('Payment received. Activating your plan…', 'ok');
+  let tries = 0;
+  const timer = setInterval(async () => {
+    tries++;
+    if (!U) return;
+    const { data } = await sb.from('profiles').select('plan').eq('id', U.id).maybeSingle();
+    if (data && data.plan && data.plan !== 'free') {
+      clearInterval(timer);
+      await loadProfile();
+      toast('Welcome to ' + (data.plan === 'studio' ? 'Studio' : 'Pro') + '!', 'ok');
+      history.replaceState(null, '', location.pathname);
+    } else if (tries >= 20) {
+      clearInterval(timer);
+      toast('Your payment is still processing. Refresh in a minute.', '');
+    }
+  }, 3000);
+})();
 
 // ── HELPERS ───────────────────────────────────────────────────────────────
 function showPanel(name) {
@@ -1003,6 +1095,7 @@ function showPanel(name) {
     if (i.textContent.toLowerCase().includes(name === 'photos' ? 'portfolio' : name)) i.classList.add('active');
   });
   if (name === 'messages') loadMessages();
+  if (name === 'projects') loadMyProjects();
   window.scrollTo(0,0);
 }
 
