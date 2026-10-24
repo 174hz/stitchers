@@ -344,6 +344,10 @@ select.fi{cursor:pointer;appearance:none;background-image:url("data:image/svg+xm
               <div class="fg"><label class="fl">Last name</label><input type="text" class="fi" id="p-last" placeholder="Tremblay"></div>
             </div>
             <div class="fg"><label class="fl">Business / display name</label><input type="text" class="fi" id="p-biz" placeholder="e.g. Marie's Atelier"><div class="fhint">What clients see on your listing</div></div>
+            <div class="fg"><label class="fl">Public handle</label>
+              <div style="position:relative;"><span style="position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--mid);font-size:14px;">@</span>
+              <input type="text" class="fi" id="p-handle" placeholder="marie-tremblay" style="padding-left:28px;" maxlength="30"></div>
+              <div class="fhint">Clients find and message you with this. Letters, numbers and hyphens, 3 to 30 characters.</div></div>
             <div class="frow">
               <div class="fg"><label class="fl">City</label><input type="text" class="fi" id="p-city" placeholder="Montréal"></div>
               <div class="fg">
@@ -522,7 +526,7 @@ select.fi{cursor:pointer;appearance:none;background-image:url("data:image/svg+xm
   <div class="modal">
     <div class="modal-t">New Message</div>
     <div class="modal-s">Send a message to another Stitchers member</div>
-    <div class="fg"><label class="fl">Recipient email</label><input type="email" class="fi" id="nm-to" placeholder="their@email.com"></div>
+    <div class="fg"><label class="fl">Recipient handle</label><input type="text" class="fi" id="nm-to" placeholder="@their-handle"></div>
     <div class="fg"><label class="fl">Subject</label><input type="text" class="fi" id="nm-subject" placeholder="e.g. Enquiry about alterations"></div>
     <div class="fg"><label class="fl">Message</label><textarea class="fi" id="nm-body" rows="4" placeholder="Write your message here..."></textarea></div>
     <div class="modal-actions">
@@ -587,6 +591,7 @@ async function loadProfile() {
   document.getElementById('p-first').value = P.first_name || '';
   document.getElementById('p-last').value  = P.last_name  || '';
   document.getElementById('p-biz').value   = P.business_name || '';
+  document.getElementById('p-handle').value = P.handle || '';
   document.getElementById('p-city').value  = P.city || '';
   document.getElementById('p-bio').value   = P.bio || '';
   document.getElementById('p-rate').value  = P.hourly_rate || '';
@@ -678,6 +683,17 @@ async function saveProfile(e) {
     plan:          P.plan || 'free',
     avatar_url:    P.avatar_url || null,
   };
+  const rawHandle = document.getElementById('p-handle').value.trim().toLowerCase().replace(/^@/, '');
+  const resetBtn = () => { btn.disabled = false; btn.textContent = 'Save Profile'; };
+  if (rawHandle && !/^[a-z0-9][a-z0-9-]{2,29}$/.test(rawHandle)) {
+    toast('Handle must be 3 to 30 letters, numbers or hyphens', 'err'); resetBtn(); return;
+  }
+  if (rawHandle) {
+    const { data: taken } = await sb.from('profiles').select('id')
+      .eq('handle', rawHandle).neq('id', U.id).maybeSingle();
+    if (taken) { toast('That handle is already taken. Please choose another.', 'err'); resetBtn(); return; }
+  }
+  payload.handle = rawHandle || null;
   const { error } = await sb.from('profiles').upsert(payload);
   if (error) { toast('Save failed: ' + error.message, 'err'); }
   else {
@@ -876,17 +892,17 @@ async function sendReply() {
 function showNewMsgModal() { document.getElementById('new-msg-modal').classList.add('show'); }
 
 async function sendNewMessage() {
-  const to      = document.getElementById('nm-to').value.trim().toLowerCase();
+  const raw = document.getElementById('nm-to').value.trim().toLowerCase().replace(/^@/, '');
   const subject = document.getElementById('nm-subject').value.trim();
-  const body    = document.getElementById('nm-body').value.trim();
-  if (!to || !body) { toast('Enter a recipient email and a message', 'err'); return; }
-  if (to === U.email.toLowerCase()) { toast("You can't message yourself", 'err'); return; }
+  const body = document.getElementById('nm-body').value.trim();
+  if (!raw || !body) { toast('Enter a handle and a message', 'err'); return; }
 
-  const { data: found, error: fErr } = await sb.rpc('find_profile_by_email', { lookup_email: to });
+  const { data: found, error: fErr } = await sb.from('profiles').select('id').eq('handle', raw).maybeSingle();
   if (fErr) { toast('Lookup failed: ' + fErr.message, 'err'); return; }
-  if (!found || !found.length) { toast('No Stitchers member found with that email', 'err'); return; }
+  if (!found) { toast('No stitcher has the handle @' + raw, 'err'); return; }
+  if (found.id === U.id) { toast("You can't message yourself", 'err'); return; }
 
-  const recipientId = found[0].id;
+  const recipientId = found.id;
   const { data, error } = await sb.from('messages').insert({
     sender_id: U.id, recipient_id: recipientId,
     subject: subject || null, message_text: body, is_read: false
