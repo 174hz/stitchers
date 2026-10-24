@@ -791,11 +791,11 @@ let nameCache = {};
 function escapeHtml(s) {
   return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
-const partnerOf = m => m.sender_id === U.id ? m.recipient_id : m.sender_id;
-const nameOf = id => nameCache[id] || 'Stitchers member';
+const partnerOf = m => (m.sender_id === U.id ? m.recipient_id : m.sender_id) || 'deleted';
+const nameOf = id => id === 'deleted' ? 'Deleted member' : (nameCache[id] || 'Stitchers member');
 
 async function loadNames(ids) {
-  const need = [...new Set(ids)].filter(id => id && !nameCache[id]);
+  const need = [...new Set(ids)].filter(id => id && id !== 'deleted' && !nameCache[id]);
   if (!need.length) return;
   const { data } = await sb.from('profiles').select('id, first_name, last_name, business_name').in('id', need);
   (data || []).forEach(p => {
@@ -876,6 +876,7 @@ async function openThread(pid) {
 
 async function sendReply() {
   if (!activeThread) return;
+  if (activeThread === 'deleted') { toast('This member has deleted their account, so you can\'t reply.', 'err'); return; }
   const el = document.getElementById('reply-txt');
   const txt = el ? el.value.trim() : '';
   if (!txt) return;
@@ -1160,8 +1161,24 @@ async function resetPwd() {
   else toast('Password reset email sent to ' + U.email, 'ok');
 }
 
-function deleteAccount() {
-  toast('To delete your account, please contact Stitchers support from the Contact page.', '');
+async function deleteAccount() {
+  const typed = prompt('This permanently deletes your profile, photos, projects and subscription. Messages you exchanged stay in other members\' inboxes, marked "Deleted member". Type DELETE to confirm.');
+  if (typed === null) return;
+  if (typed !== 'DELETE') { toast('Account not deleted. Type DELETE exactly to confirm.', 'err'); return; }
+  try {
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) { location.href = 'index.html'; return; }
+    const r = await fetch(FN_BASE + 'delete-account', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token, 'apikey': SB_ANON },
+      body: JSON.stringify({ confirm: 'DELETE' })
+    });
+    const out = await r.json();
+    if (!r.ok) throw new Error(out.error || 'Could not delete your account.');
+    await sb.auth.signOut();
+    alert('Your account has been deleted.');
+    location.href = 'home.html';
+  } catch (e) { toast(e.message, 'err'); }
 }
 
 // Close modals on overlay click
