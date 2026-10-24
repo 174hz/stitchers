@@ -104,7 +104,8 @@ const SB_URL  = 'https://juyljsaqqkymtfvlftgo.supabase.co';
 const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp1eWxqc2FxcWt5bXRmdmxmdGdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE5OTgzNDEsImV4cCI6MjEwNzU3NDM0MX0.3ZU35hBkfctK085y7160peLDqNxkzoo97hVumd06fuo';
 const sb = supabase.createClient(SB_URL, SB_ANON);
 
-const pid = new URLSearchParams(location.search).get('id');
+let pid = new URLSearchParams(location.search).get('id');
+const handleParam = (new URLSearchParams(location.search).get('h') || '').toLowerCase();
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 let lang = localStorage.getItem('stitchers_lang') || 'en';
 let S = { me: null, p: null, specs: [], photos: [], reviews: [], names: {}, loaded: false };
@@ -135,6 +136,10 @@ async function load() {
   S.me = session ? session.user : null;
   updateNav();
 
+  if (!pid && handleParam) {
+    const { data: byHandle } = await sb.from('profiles').select('id').eq('handle', handleParam).maybeSingle();
+    if (byHandle) pid = byHandle.id;
+  }
   if (!pid || !UUID.test(pid)) { S.loaded = true; return render(); }
 
   const { data: p } = await sb.from('profiles').select('*').eq('id', pid).maybeSingle();
@@ -205,6 +210,7 @@ function render() {
         <div class="av">${p.avatar_url ? `<img src="${esc(p.avatar_url)}" alt="${esc(name)}" onerror="this.parentElement.textContent='${initial}'">` : initial}</div>
         <div>
           <div class="name">${esc(name)}</div>
+          ${p.handle ? `<div class="sub">@${esc(p.handle)}</div>` : ''}
           <div class="sub">📍 ${esc(loc)}${avg ? ` · <span class="stars">${stars(avg)}</span> ${avg.toFixed(1)} (${S.reviews.length} ${t('reviewsCount')})` : ''}</div>
           ${isPro ? `<span class="pro">${t('pro')}</span>` : ''}
           ${S.specs.length ? `<div class="tags">${S.specs.map(s => `<span class="tag">${esc(specLabel(s.specialty))}</span>`).join('')}</div>` : ''}
