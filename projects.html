@@ -39,6 +39,7 @@ h1{font-family:var(--serif);font-size:32px;color:var(--plum);margin-bottom:8px}
 .gbtn{background:var(--cream);color:var(--mid);border:1px solid var(--border);border-radius:100px;padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--sans)}
 @media(max-width:700px){.nl{display:none}}
 </style>
+<script src="config.js"></script>
 </head>
 <body>
 <nav><div class="ni">
@@ -70,8 +71,8 @@ h1{font-family:var(--serif);font-size:32px;color:var(--plum);margin-bottom:8px}
 </div>
 
 <script>
-const sb = supabase.createClient('https://juyljsaqqkymtfvlftgo.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp1eWxqc2FxcWt5bXRmdmxmdGdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE5OTgzNDEsImV4cCI6MjEwNzU3NDM0MX0.3ZU35hBkfctK085y7160peLDqNxkzoo97hVumd06fuo');
+const sb = supabase.createClient(window.STITCHERS.url,
+  window.STITCHERS.anon);
 
 const SPECS = ['Bridal & Formal Wear','Alterations & Tailoring','Custom Design & Dressmaking','Restoration & Upcycling','Costumes & Theatrical','Knitwear & Specialty Fabrics','Menswear & Suits','Childrenswear','Home Textiles'];
 const PROVS = ['Ontario','Québec','British Columbia','Alberta','Manitoba','Saskatchewan','Nova Scotia','New Brunswick','Newfoundland and Labrador','Prince Edward Island','Northwest Territories','Yukon','Nunavut'];
