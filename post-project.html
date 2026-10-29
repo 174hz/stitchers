@@ -32,6 +32,7 @@ textarea.fi{resize:vertical}
 .err{color:#C8102E;font-size:13px;margin-bottom:12px;display:none}
 @media(max-width:600px){.row{grid-template-columns:1fr}.nl{display:none}}
 </style>
+<script src="config.js"></script>
 </head>
 <body>
 <nav><div class="ni">
@@ -78,8 +79,8 @@ textarea.fi{resize:vertical}
 </div>
 
 <script>
-const sb = supabase.createClient('https://juyljsaqqkymtfvlftgo.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp1eWxqc2FxcWt5bXRmdmxmdGdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE5OTgzNDEsImV4cCI6MjEwNzU3NDM0MX0.3ZU35hBkfctK085y7160peLDqNxkzoo97hVumd06fuo');
+const sb = supabase.createClient(window.STITCHERS.url,
+  window.STITCHERS.anon);
 
 const SPECS = ['Bridal & Formal Wear','Alterations & Tailoring','Custom Design & Dressmaking','Restoration & Upcycling','Costumes & Theatrical','Knitwear & Specialty Fabrics','Menswear & Suits','Childrenswear','Home Textiles'];
 const PROVS = ['Ontario','Québec','British Columbia','Alberta','Manitoba','Saskatchewan','Nova Scotia','New Brunswick','Newfoundland and Labrador','Prince Edward Island','Northwest Territories','Yukon','Nunavut'];
@@ -118,7 +119,8 @@ document.getElementById('f').addEventListener('submit', async (e) => {
     province: document.getElementById('p-prov').value,
     budget: document.getElementById('p-budget').value.trim() || null,
     timeline: document.getElementById('p-time').value.trim() || null,
-    status: 'open'
+    status: 'open',
+    country: window.STITCHERS.country || 'US'
   };
 
   btn.disabled = true; btn.textContent = 'Posting…';
