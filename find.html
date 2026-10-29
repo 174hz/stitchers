@@ -98,6 +98,7 @@ footer{background:var(--char);padding:56px 0 28px;margin-top:60px;}
 @media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr);}.footer-grid{grid-template-columns:1fr 1fr;}.nav-links{display:none;}}
 @media(max-width:500px){.grid{grid-template-columns:1fr;}}
 </style>
+<script src="config.js"></script>
 </head>
 <body>
 <nav>
@@ -199,8 +200,8 @@ footer{background:var(--char);padding:56px 0 28px;margin-top:60px;}
 </footer>
 
 <script>
-const SB_URL  = 'https://juyljsaqqkymtfvlftgo.supabase.co';
-const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp1eWxqc2FxcWt5bXRmdmxmdGdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE5OTgzNDEsImV4cCI6MjEwNzU3NDM0MX0.3ZU35hBkfctK085y7160peLDqNxkzoo97hVumd06fuo';
+const SB_URL  = window.STITCHERS.url;
+const SB_ANON = window.STITCHERS.anon;
 const sb = supabase.createClient(SB_URL, SB_ANON);
 
 let allStitchers = [];
