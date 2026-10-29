@@ -30,6 +30,7 @@ nav{position:fixed;top:0;left:0;right:0;background:var(--plum);height:60px;displ
 .spinner{width:36px;height:36px;border:3px solid #E8E0D8;border-top-color:var(--plum);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto;}
 @keyframes spin{to{transform:rotate(360deg);}}
 </style>
+<script src="config.js"></script>
 </head>
 <body>
 
@@ -79,8 +80,8 @@ nav{position:fixed;top:0;left:0;right:0;background:var(--plum);height:60px;displ
 </div>
 
 <script>
-const SUPABASE_URL  = 'https://juyljsaqqkymtfvlftgo.supabase.co';
-const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp1eWxqc2FxcWt5bXRmdmxmdGdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE5OTgzNDEsImV4cCI6MjEwNzU3NDM0MX0.3ZU35hBkfctK085y7160peLDqNxkzoo97hVumd06fuo';
+const SUPABASE_URL  = window.STITCHERS.url;
+const SUPABASE_ANON = window.STITCHERS.anon;
 const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
 
