@@ -149,6 +149,7 @@ textarea.form-input{resize:vertical;}
   .name-row{grid-template-columns:1fr;}
 }
 </style>
+<script src="config.js"></script>
 </head>
 <body>
 
@@ -419,8 +420,8 @@ textarea.form-input{resize:vertical;}
 
 <script>
 // ── SUPABASE INIT ──────────────────────────────────────────────────────────
-const SUPABASE_URL  = 'https://juyljsaqqkymtfvlftgo.supabase.co';
-const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp1eWxqc2FxcWt5bXRmdmxmdGdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE5OTgzNDEsImV4cCI6MjEwNzU3NDM0MX0.3ZU35hBkfctK085y7160peLDqNxkzoo97hVumd06fuo';
+const SUPABASE_URL  = window.STITCHERS.url;
+const SUPABASE_ANON = window.STITCHERS.anon;
 const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
 
@@ -610,6 +611,7 @@ async function completeSignup() {
       email: S.data.email,
       password: S.data.password,
       options: {
+        emailRedirectTo: 'https://174hz.github.io/stitchers/dashboard.html',
         data: {
           first_name: S.data.firstName,
           last_name:  S.data.lastName,
@@ -624,6 +626,7 @@ async function completeSignup() {
     const profilePayload = {
       id:            userId,
       email:         S.data.email,
+      country:       window.STITCHERS.country || 'US',
       account_type:  S.accountType,
       first_name:    S.data.firstName,
       last_name:     S.data.lastName,
