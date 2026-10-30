@@ -120,6 +120,9 @@
     '.sfx-btn:hover{background:rgba(255,255,255,0.12);}' +
     '.sfx-banner{background:#F5F0F8;border-bottom:1px solid #E8E0D8;color:#4A2040;font-family:Inter,system-ui,sans-serif;font-size:14px;padding:12px 24px;display:flex;justify-content:center;align-items:center;gap:16px;flex-wrap:wrap;}' +
     '.sfx-banner a{color:#4A2040;font-weight:600;}' +
+    '.sfx-country{background:#fff;border-bottom:1px solid #E8E0D8;padding:10px 16px;display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:wrap;font-family:Inter,system-ui,sans-serif;font-size:13px;color:#666;}' +
+    '.sfx-pill{border:1.5px solid #4A2040;background:#fff;color:#4A2040;border-radius:100px;padding:6px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}' +
+    '.sfx-pill:hover{background:#4A2040;color:#fff;}' +
     '.sfx-badge{display:none;background:#C4716A;color:#fff;border-radius:100px;font-size:11px;font-weight:700;padding:1px 7px;margin-left:6px;}' +
     '@media(max-width:900px){footer#site-footer .sf-grid{grid-template-columns:1fr 1fr;}}';
 
@@ -242,62 +245,16 @@
     sb.auth.getSession().then(function (r) {
       var session = r.data && r.data.session;
       if (!session) return;
-      showSignedIn(session);
-      if (/index\.html$|\/stitchers\/?$/.test(location.pathname)) showBanner(session);
+      sb.auth.getUser().then(function (u) {
+        if (u.error || !u.data || !u.data.user) {
+          // Account no longer exists (for example, it was deleted): clear the stale login
+          sb.auth.signOut({ scope: 'local' }).then(function () { location.reload(); });
+          return;
+        }
+        showSignedIn(session);
+        if (/index\.html$|\/stitchers\/?$/.test(location.pathname)) showBanner(session);
+      });
     });
-  }
-
-  // ── Mobile layout (shared across every page) ───────────────────────────
-  var MOBILE_CSS = `
-@media (max-width: 700px) {
-  html, body { overflow-x: hidden; }
-  nav > div { flex-wrap: wrap !important; height: auto !important; min-height: 60px; padding: 10px 14px !important; row-gap: 8px; }
-  nav .logo, nav a.logo { font-size: 18px !important; }
-  nav .nl { display: flex !important; order: 3; width: 100%; justify-content: center; flex-wrap: wrap; gap: 6px 14px !important; }
-  nav .nl a { font-size: 12px !important; }
-  #nc, #nav-ctas, .nc, .nav-ctas, .nav-r { flex-wrap: wrap !important; gap: 6px !important; justify-content: flex-end; }
-  #nav-av { width: 30px !important; height: 30px !important; }
-  #nav-nm, #nav-pl { display: none !important; }
-  .sfx-btn, .bg, .bp, .btn-ghost, .btn-primary, .btn-so, .btn-home { padding: 6px 12px !important; font-size: 12px !important; }
-  .sfx-banner { flex-direction: column; gap: 6px; text-align: center; padding: 10px 14px; }
-  h1, .pt, .section-title, .st, .form-title { font-size: 26px !important; }
-  .card, .wrap, .c, .container, .s, .section { padding-left: 14px !important; padding-right: 14px !important; }
-  .card { padding: 18px !important; max-width: 100%; }
-  .grid2, .grid3, .grid4, .row, .frow, .form-row, .name-row, .plan-grid, .spec-grid, .how-grid, .testimonial-grid {
-    grid-template-columns: 1fr !important;
-  }
-  .stats, .stats-row { grid-template-columns: repeat(2, 1fr) !important; }
-  .photos, .port-grid { grid-template-columns: repeat(2, 1fr) !important; }
-  input, select, textarea { font-size: 16px !important; max-width: 100%; }
-  img { max-width: 100%; height: auto; }
-  .welcome { flex-direction: column; align-items: flex-start; gap: 12px; }
-  .search-box { flex-direction: column; border-radius: 16px !important; }
-  .sf { border-right: none !important; border-bottom: 1px solid #E8E0D8; }
-  .btn-search { border-radius: 0 0 16px 16px !important; width: 100%; }
-  .msg-layout { grid-template-columns: 1fr !important; }
-  .msg-list { display: block !important; max-height: 220px; overflow-y: auto; border-right: none !important; border-bottom: 1px solid #E8E0D8; }
-  .msg-thread { min-height: 320px; }
-  .layout { padding: 16px 14px !important; gap: 16px !important; }
-  .sb { position: static !important; }
-  .head { grid-template-columns: 1fr !important; text-align: center; }
-  footer#site-footer .sf-grid { grid-template-columns: 1fr !important; gap: 22px !important; }
-  footer#site-footer .sf-bottom { flex-direction: column; align-items: flex-start; gap: 6px; }
-  footer#site-footer .sf-inner { padding: 0 16px; }
-}`;
-
-  function injectMobileCss() {
-    if (!document.getElementById('site-mobile-css')) {
-      var st = document.createElement('style');
-      st.id = 'site-mobile-css';
-      st.textContent = MOBILE_CSS;
-      document.head.appendChild(st);
-    }
-    if (!document.querySelector('meta[name="viewport"]')) {
-      var m = document.createElement('meta');
-      m.name = 'viewport';
-      m.content = 'width=device-width, initial-scale=1.0';
-      document.head.appendChild(m);
-    }
   }
 
   // ── Country choice (each country has its own database) ─────────────────
@@ -308,10 +265,10 @@
     var fr = getLang() === 'fr';
     var box = document.createElement('div');
     box.id = 'sfx-country-picker';
-    box.className = 'sfx-banner';
-    box.innerHTML = '<span>' + (fr ? 'Choisissez votre pays :' : 'Where are you joining from?') + '</span>' +
-      '<button class="sfx-btn" data-pick="CA" style="color:#4A2040;border-color:#4A2040;">Canada</button>' +
-      '<button class="sfx-btn" data-pick="US" style="color:#4A2040;border-color:#4A2040;">United States</button>';
+    box.className = 'sfx-country';
+    box.innerHTML = '<span>' + (fr ? 'Vous vous inscrivez depuis :' : 'Where are you joining from?') + '</span>' +
+      '<button class="sfx-pill" data-pick="CA">🇨🇦 Canada</button>' +
+      '<button class="sfx-pill" data-pick="US">🇺🇸 United States</button>';
     nav.insertAdjacentElement('afterend', box);
     box.querySelectorAll('[data-pick]').forEach(function (btn) {
       btn.onclick = function () {
@@ -330,7 +287,7 @@
       b.setAttribute('data-country-switch', '');
       b.className = 'sfx-btn';
       b.style.marginLeft = '8px';
-      b.textContent = C.country ? (C.label + ' · switch') : 'Choose country';
+      b.textContent = C.country ? ((C.country === 'CA' ? '🇨🇦 Canada' : '🇺🇸 United States') + ' ⇄') : 'Choose country';
       b.onclick = function () {
         if (!C.country) { showPicker(); return; }
         localStorage.setItem('stitchers_country', other);
