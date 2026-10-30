@@ -556,6 +556,13 @@ let activeThread = null;
 (async () => {
   const { data: { session } } = await sb.auth.getSession();
   if (!session) { window.location.href = 'index.html'; return; }
+  const { error: userErr } = await sb.auth.getUser();
+  if (userErr) {
+    await sb.auth.signOut({ scope: 'local' }).catch(function () {});
+    Object.keys(localStorage).forEach(function (k) { if (k.startsWith('sb-')) localStorage.removeItem(k); });
+    window.location.href = 'index.html';
+    return;
+  }
   U = session.user;
   await loadProfile();
   await loadPhotos();
@@ -1177,7 +1184,8 @@ async function deleteAccount() {
     });
     const out = await r.json();
     if (!r.ok) throw new Error(out.error || 'Could not delete your account.');
-    await sb.auth.signOut();
+    await sb.auth.signOut({ scope: 'local' }).catch(function () {});
+    Object.keys(localStorage).forEach(function (k) { if (k.startsWith('sb-')) localStorage.removeItem(k); });
     alert('Your account has been deleted.');
     location.href = 'home.html';
   } catch (e) { toast(e.message, 'err'); }
